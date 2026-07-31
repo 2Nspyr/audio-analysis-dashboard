@@ -3,8 +3,10 @@ __pycache__/
 static/uploads/*
 static/reports/*
 static/work/*
+static/generated/*
 !static/uploads/.gitkeep
 !static/reports/.gitkeep
 !static/work/.gitkeep
+!static/generated/.gitkeep
 test_files/
 .DS_Store

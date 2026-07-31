@@ -10,11 +10,12 @@ from report import build_report
 from youtube_dl import is_youtube_url, download_audio, YouTubeDownloadError
 from generation import (
     generate_pure_tone, generate_binaural, generate_isochronic,
-    layer_with_import, write_wav,
+    generate_sequence, layer_with_import, write_wav,
 )
 from analysis.binaural import analyze_binaural
 from analysis.isochronic import analyze_isochronic
 import jobs
+import frequency_library
 
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 UPLOAD_DIR = os.path.join(BASE_DIR, "static", "uploads")
@@ -236,6 +237,87 @@ def generate():
         label=gen_label,
         download_url=url_for("static", filename=f"generated/{out_filename}"),
         verification=verification,
+    )
+
+
+@app.route("/library", methods=["GET"])
+def library_browse():
+    return render_template(
+        "library.html",
+        entries=frequency_library.get_all_entries(),
+        categories=frequency_library.get_categories(),
+        meta=frequency_library.get_meta(),
+    )
+
+
+@app.route("/library/<slug>/generate", methods=["POST"])
+def library_generate(slug):
+    entry = frequency_library.get_entry(slug)
+    if not entry:
+        flash("That frequency preset wasn't found.")
+        return redirect(url_for("library_browse"))
+
+    try:
+        duration = float(request.form.get("duration", 300))
+        duration = max(10, min(duration, 3600))
+    except (TypeError, ValueError):
+        flash("Invalid duration.")
+        return redirect(url_for("library_browse"))
+
+    mode = request.form.get("render_mode", "auto")  # auto | pure | isochronic
+    freqs = entry["frequencies_hz"]
+    if not freqs:
+        flash("This preset has no numeric frequencies to generate (display-only entry).")
+        return redirect(url_for("library_browse"))
+
+    try:
+        if mode == "isochronic":
+            # Force every step through the isochronic carrier, even frequencies
+            # that would normally play as a plain tone - useful if the person
+            # wants a consistent "felt pulse" character across the whole
+            # sequence rather than a mix of tones and pulses.
+            import numpy as np
+            segments = []
+            sr = None
+            for f in freqs:
+                seg, sr = generate_isochronic(200.0, f, duration / len(freqs))
+                segments.append(seg)
+            signal = np.concatenate(segments)
+        else:
+            signal, sr = generate_sequence(freqs, duration)
+        gen_label = f"{entry['name']} ({entry['frequencies_display']} Hz)"
+    except Exception as e:
+        traceback.print_exc()
+        flash(f"Generation failed: {e}")
+        return redirect(url_for("library_browse"))
+
+    # Optional layering under an imported file, same as the freeform generator
+    layer_file = request.files.get("layer_file")
+    if layer_file and layer_file.filename:
+        try:
+            mix_ratio = float(request.form.get("mix_ratio", 0.4))
+            mix_ratio = max(0.0, min(mix_ratio, 1.0))
+            gen_id = uuid.uuid4().hex[:8]
+            layer_upload_path = os.path.join(UPLOAD_DIR, f"{gen_id}_{layer_file.filename}")
+            layer_file.save(layer_upload_path)
+            imported_audio = load_audio(layer_upload_path, WORK_DIR)
+            signal = layer_with_import(signal, sr, imported_audio["data"], imported_audio["sr"], mix_ratio)
+            gen_label += f" (layered under '{layer_file.filename}' at {int(mix_ratio*100)}% bed volume)"
+        except Exception as e:
+            traceback.print_exc()
+            flash(f"Layering failed, generated the bed alone instead: {e}")
+
+    gen_id = uuid.uuid4().hex[:12]
+    out_filename = f"{gen_id}.wav"
+    out_path = os.path.join(GENERATED_DIR, out_filename)
+    write_wav(signal, sr, out_path)
+
+    return render_template(
+        "generate_result.html",
+        label=gen_label,
+        download_url=url_for("static", filename=f"generated/{out_filename}"),
+        verification=None,
+        library_note=entry["frequencies_display"],
     )
 
 

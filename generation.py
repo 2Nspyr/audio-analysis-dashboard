@@ -56,6 +56,56 @@ def generate_isochronic(tone_hz: float, pulse_hz: float, duration_sec: float,
     return pulsed, sr  # mono
 
 
+MIN_AUDIBLE_HZ = 20.0
+ISOCHRONIC_CARRIER_HZ = 200.0  # audible carrier used to make sub-20Hz rates perceivable
+
+
+def generate_sequence(frequencies, total_duration_sec: float, sr: int = DEFAULT_SR,
+                       amplitude: float = 0.5, per_freq_sec: float = None,
+                       segment_fade_ms: float = 80.0):
+    """Steps through `frequencies` in order, either dividing total_duration_sec
+    evenly across the list once (per_freq_sec=None) or looping the list with
+    each step held for per_freq_sec until total_duration_sec is filled.
+
+    Many CAFL entries include frequencies below 20 Hz (e.g. brainwave-range
+    values like 4, 8, 10). On the original electrical-stimulation devices
+    these were pulse rates delivered to the body, not sounds - a 3 Hz sine
+    wave is below the floor of human hearing and would just be silence in an
+    audio file, not "the frequency" in any perceptible sense. To make every
+    entry actually audible (and consistent with how this app already
+    represents rates via isochronic pulsing elsewhere), any frequency below
+    MIN_AUDIBLE_HZ is rendered as an isochronic pulse - an audible carrier
+    tone gated on/off at that rate - instead of a silent/inaudible pure tone.
+    Frequencies at or above MIN_AUDIBLE_HZ render as a straightforward pure
+    tone, same as the original protocol intends.
+    """
+    if not frequencies:
+        raise ValueError("frequencies list is empty")
+
+    if per_freq_sec is None:
+        per_freq_sec = total_duration_sec / len(frequencies)
+
+    segments = []
+    remaining = total_duration_sec
+    i = 0
+    while remaining > 0.01:
+        freq = frequencies[i % len(frequencies)]
+        seg_dur = min(per_freq_sec, remaining)
+
+        if freq < MIN_AUDIBLE_HZ:
+            seg, _ = generate_isochronic(ISOCHRONIC_CARRIER_HZ, freq, seg_dur, sr=sr, amplitude=amplitude)
+        else:
+            seg, _ = generate_pure_tone(freq, seg_dur, sr=sr, amplitude=amplitude)
+
+        seg = _fade(seg, sr, fade_ms=segment_fade_ms)
+        segments.append(seg)
+        remaining -= seg_dur
+        i += 1
+
+    full = np.concatenate(segments)
+    return full, sr  # mono
+
+
 def to_stereo(mono_or_stereo):
     if mono_or_stereo.ndim == 1:
         return np.stack([mono_or_stereo, mono_or_stereo], axis=1)

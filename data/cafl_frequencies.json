@@ -1,0 +1,1827 @@
+{
+  "source": "CAFL (Consolidated Annotated Frequency List) - a publicly available, decades-old practitioner-compiled reference (Jim Bare, Dan Tracy, and others), NOT Dr. Rife's original 1930s radio-frequency lab measurements. This is the audio-range standard used by virtually every practical Rife-frequency tool.",
+  "disclaimer": "For wellness/experimental use. These frequency associations come from historical practitioner compilations, not clinical trials - nothing here is a medical claim or a substitute for medical care.",
+  "entries": [
+    {
+      "slug": "brain-waves-alpha",
+      "name": "Brain Waves (Alpha)",
+      "category": "Brainwave States",
+      "frequencies_hz": [
+        10.0
+      ],
+      "frequencies_display": "8-12"
+    },
+    {
+      "slug": "brain-waves-beta",
+      "name": "Brain Waves (Beta)",
+      "category": "Brainwave States",
+      "frequencies_hz": [
+        21.0
+      ],
+      "frequencies_display": "12-30"
+    },
+    {
+      "slug": "brain-waves-delta",
+      "name": "Brain Waves (Delta)",
+      "category": "Brainwave States",
+      "frequencies_hz": [
+        4.0
+      ],
+      "frequencies_display": "4 and lower"
+    },
+    {
+      "slug": "brain-waves-theta",
+      "name": "Brain Waves (Theta)",
+      "category": "Brainwave States",
+      "frequencies_hz": [
+        6.0
+      ],
+      "frequencies_display": "4-8"
+    },
+    {
+      "slug": "anemia",
+      "name": "Anemia",
+      "category": "Cardiovascular & Circulation",
+      "frequencies_hz": [
+        5000.0
+      ],
+      "frequencies_display": "5000"
+    },
+    {
+      "slug": "aneurysm",
+      "name": "Aneurysm",
+      "category": "Cardiovascular & Circulation",
+      "frequencies_hz": [
+        20.0
+      ],
+      "frequencies_display": "20"
+    },
+    {
+      "slug": "arteriosclerosis",
+      "name": "Arteriosclerosis",
+      "category": "Cardiovascular & Circulation",
+      "frequencies_hz": [
+        20.0,
+        727.0,
+        787.0,
+        880.0,
+        5000.0,
+        10000.0
+      ],
+      "frequencies_display": "20, 727, 787, 880, 5000, 10000"
+    },
+    {
+      "slug": "edema",
+      "name": "Edema",
+      "category": "Cardiovascular & Circulation",
+      "frequencies_hz": [
+        727.0,
+        787.0,
+        880.0
+      ],
+      "frequencies_display": "727, 787, 880"
+    },
+    {
+      "slug": "heart-angina-pectoris",
+      "name": "Heart, Angina Pectoris",
+      "category": "Cardiovascular & Circulation",
+      "frequencies_hz": [
+        5000.0
+      ],
+      "frequencies_display": "5000"
+    },
+    {
+      "slug": "heart-tachycardia",
+      "name": "Heart, Tachycardia",
+      "category": "Cardiovascular & Circulation",
+      "frequencies_hz": [
+        5000.0
+      ],
+      "frequencies_display": "5000"
+    },
+    {
+      "slug": "high-blood-pressure",
+      "name": "High Blood Pressure",
+      "category": "Cardiovascular & Circulation",
+      "frequencies_hz": [
+        20.0,
+        304.0,
+        727.0,
+        880.0,
+        10000.0
+      ],
+      "frequencies_display": "20, 304, 727, 880, 10000"
+    },
+    {
+      "slug": "stroke",
+      "name": "Stroke",
+      "category": "Cardiovascular & Circulation",
+      "frequencies_hz": [
+        3.0,
+        20.0,
+        230.0,
+        5000.0,
+        10000.0
+      ],
+      "frequencies_display": "3, 20, 230, 5000, 10000"
+    },
+    {
+      "slug": "general-detoxification",
+      "name": "General Detoxification",
+      "category": "Detox & Vitality",
+      "frequencies_hz": [
+        20.0,
+        440.0,
+        880.0,
+        5000.0,
+        10000.0
+      ],
+      "frequencies_display": "20, 440, 880, 5000, 10000"
+    },
+    {
+      "slug": "general-vitality-immune-support",
+      "name": "General Vitality / Immune Support",
+      "category": "Detox & Vitality",
+      "frequencies_hz": [
+        20.0,
+        727.0,
+        787.0,
+        880.0,
+        5000.0,
+        10000.0
+      ],
+      "frequencies_display": "20, 727, 787, 880, 5000, 10000"
+    },
+    {
+      "slug": "nicotine-poisoning",
+      "name": "Nicotine Poisoning",
+      "category": "Detox & Vitality",
+      "frequencies_hz": [
+        10000.0
+      ],
+      "frequencies_display": "10000"
+    },
+    {
+      "slug": "abdominal-cramps",
+      "name": "Abdominal Cramps",
+      "category": "Digestive & Gut",
+      "frequencies_hz": [
+        72.0,
+        95.0,
+        190.0,
+        304.0
+      ],
+      "frequencies_display": "72, 95, 190, 304"
+    },
+    {
+      "slug": "appendicitis",
+      "name": "Appendicitis",
+      "category": "Digestive & Gut",
+      "frequencies_hz": [
+        727.0,
+        787.0,
+        880.0
+      ],
+      "frequencies_display": "727, 787, 880"
+    },
+    {
+      "slug": "cirrhosis",
+      "name": "Cirrhosis",
+      "category": "Digestive & Gut",
+      "frequencies_hz": [
+        727.0,
+        787.0,
+        880.0,
+        10000.0
+      ],
+      "frequencies_display": "727, 787, 880, 10000"
+    },
+    {
+      "slug": "colic",
+      "name": "Colic",
+      "category": "Digestive & Gut",
+      "frequencies_hz": [
+        727.0,
+        787.0,
+        800.0,
+        880.0
+      ],
+      "frequencies_display": "727, 787, 800, 880"
+    },
+    {
+      "slug": "colitis",
+      "name": "Colitis",
+      "category": "Digestive & Gut",
+      "frequencies_hz": [
+        727.0,
+        787.0,
+        800.0,
+        880.0,
+        10000.0
+      ],
+      "frequencies_display": "727, 787, 800, 880, 10000"
+    },
+    {
+      "slug": "constipation",
+      "name": "Constipation",
+      "category": "Digestive & Gut",
+      "frequencies_hz": [
+        727.0,
+        787.0,
+        800.0,
+        880.0
+      ],
+      "frequencies_display": "727, 787, 800, 880"
+    },
+    {
+      "slug": "diarrhea",
+      "name": "Diarrhea",
+      "category": "Digestive & Gut",
+      "frequencies_hz": [
+        727.0,
+        787.0,
+        800.0,
+        880.0
+      ],
+      "frequencies_display": "727, 787, 800, 880"
+    },
+    {
+      "slug": "dysentery",
+      "name": "Dysentery",
+      "category": "Digestive & Gut",
+      "frequencies_hz": [
+        727.0,
+        787.0,
+        800.0,
+        880.0
+      ],
+      "frequencies_display": "727, 787, 800, 880"
+    },
+    {
+      "slug": "dyspepsia-indigestion",
+      "name": "Dyspepsia (Indigestion)",
+      "category": "Digestive & Gut",
+      "frequencies_hz": [
+        727.0,
+        787.0,
+        800.0,
+        880.0
+      ],
+      "frequencies_display": "727, 787, 800, 880"
+    },
+    {
+      "slug": "food-poisoning",
+      "name": "Food Poisoning",
+      "category": "Digestive & Gut",
+      "frequencies_hz": [
+        727.0,
+        787.0,
+        880.0,
+        10000.0
+      ],
+      "frequencies_display": "727, 787, 880, 10000"
+    },
+    {
+      "slug": "gastritis",
+      "name": "Gastritis",
+      "category": "Digestive & Gut",
+      "frequencies_hz": [
+        20.0,
+        727.0,
+        787.0,
+        880.0,
+        10000.0
+      ],
+      "frequencies_display": "20, 727, 787, 880, 10000"
+    },
+    {
+      "slug": "hemorrhoids",
+      "name": "Hemorrhoids",
+      "category": "Digestive & Gut",
+      "frequencies_hz": [
+        20.0,
+        727.0,
+        800.0,
+        880.0
+      ],
+      "frequencies_display": "20, 727, 800, 880"
+    },
+    {
+      "slug": "intestines-spasms",
+      "name": "Intestines, Spasms",
+      "category": "Digestive & Gut",
+      "frequencies_hz": [
+        5000.0
+      ],
+      "frequencies_display": "5000"
+    },
+    {
+      "slug": "nausea",
+      "name": "Nausea",
+      "category": "Digestive & Gut",
+      "frequencies_hz": [
+        72.0,
+        95.0,
+        190.0,
+        304.0,
+        727.0,
+        787.0,
+        880.0,
+        5000.0
+      ],
+      "frequencies_display": "72, 95, 190, 304, 727, 787, 880, 5000"
+    },
+    {
+      "slug": "ulcers-duodenal",
+      "name": "Ulcers, Duodenal",
+      "category": "Digestive & Gut",
+      "frequencies_hz": [
+        727.0,
+        880.0,
+        10000.0
+      ],
+      "frequencies_display": "727, 880, 10000"
+    },
+    {
+      "slug": "ulcers-most",
+      "name": "Ulcers, Most",
+      "category": "Digestive & Gut",
+      "frequencies_hz": [
+        664.0,
+        727.0,
+        776.0,
+        787.0,
+        800.0,
+        832.0,
+        880.0
+      ],
+      "frequencies_display": "664, 727, 776, 787, 800, 832, 880"
+    },
+    {
+      "slug": "adenoids",
+      "name": "Adenoids",
+      "category": "Ears, Eyes, Mouth & Throat",
+      "frequencies_hz": [
+        20.0,
+        727.0,
+        787.0,
+        800.0,
+        880.0
+      ],
+      "frequencies_display": "20, 727, 787, 800, 880"
+    },
+    {
+      "slug": "bad-teeth",
+      "name": "Bad Teeth",
+      "category": "Ears, Eyes, Mouth & Throat",
+      "frequencies_hz": [
+        400.0,
+        727.0,
+        787.0,
+        880.0,
+        5000.0,
+        10000.0
+      ],
+      "frequencies_display": "400, 727, 787, 880, 5000, 10000"
+    },
+    {
+      "slug": "deafness",
+      "name": "Deafness",
+      "category": "Ears, Eyes, Mouth & Throat",
+      "frequencies_hz": [
+        20.0,
+        800.0,
+        10000.0
+      ],
+      "frequencies_display": "20, 800, 10000"
+    },
+    {
+      "slug": "eye-cataract",
+      "name": "Eye, Cataract",
+      "category": "Ears, Eyes, Mouth & Throat",
+      "frequencies_hz": [
+        727.0,
+        784.0,
+        787.0,
+        880.0,
+        1600.0,
+        5000.0,
+        10000.0
+      ],
+      "frequencies_display": "727, 784, 787, 880, 1600, 5000, 10000"
+    },
+    {
+      "slug": "eye-glaucoma",
+      "name": "Eye, Glaucoma",
+      "category": "Ears, Eyes, Mouth & Throat",
+      "frequencies_hz": [
+        727.0,
+        787.0,
+        880.0,
+        1600.0,
+        5000.0,
+        10000.0
+      ],
+      "frequencies_display": "727, 787, 880, 1600, 5000, 10000"
+    },
+    {
+      "slug": "pyorrhea",
+      "name": "Pyorrhea",
+      "category": "Ears, Eyes, Mouth & Throat",
+      "frequencies_hz": [
+        20.0,
+        727.0,
+        787.0
+      ],
+      "frequencies_display": "20, 727, 787"
+    },
+    {
+      "slug": "sore-throat",
+      "name": "Sore Throat",
+      "category": "Ears, Eyes, Mouth & Throat",
+      "frequencies_hz": [
+        727.0,
+        787.0,
+        880.0
+      ],
+      "frequencies_display": "727, 787, 880"
+    },
+    {
+      "slug": "tinnitus",
+      "name": "Tinnitus",
+      "category": "Ears, Eyes, Mouth & Throat",
+      "frequencies_hz": [
+        20.0,
+        727.0,
+        784.0,
+        787.0,
+        880.0
+      ],
+      "frequencies_display": "20, 727, 784, 787, 880"
+    },
+    {
+      "slug": "tonsillitis",
+      "name": "Tonsillitis",
+      "category": "Ears, Eyes, Mouth & Throat",
+      "frequencies_hz": [
+        20.0,
+        727.0,
+        787.0,
+        880.0
+      ],
+      "frequencies_display": "20, 727, 787, 880"
+    },
+    {
+      "slug": "chronic-fatigue-syndrome",
+      "name": "Chronic Fatigue Syndrome",
+      "category": "Hormonal & Metabolic",
+      "frequencies_hz": [
+        120.0,
+        424.0,
+        465.0,
+        660.0,
+        665.0,
+        727.0,
+        787.0,
+        880.0,
+        1550.0,
+        2128.0
+      ],
+      "frequencies_display": "120, 424, 465, 660, 665, 727, 787, 880, 1550, 2128"
+    },
+    {
+      "slug": "diabetes",
+      "name": "Diabetes",
+      "category": "Hormonal & Metabolic",
+      "frequencies_hz": [
+        20.0,
+        48.0,
+        72.0,
+        95.0,
+        125.0,
+        302.0,
+        444.0,
+        450.0,
+        465.0,
+        666.0,
+        690.0,
+        727.0,
+        787.0,
+        800.0,
+        880.0,
+        1550.0,
+        1850.0,
+        1865.0,
+        2008.0,
+        2128.0,
+        4200.0,
+        5000.0,
+        10000.0
+      ],
+      "frequencies_display": "20, 48, 72, 95, 125, 302, 444, 450, 465, 666, 690, 727, 787, 800, 880, 1550, 1850, 1865, 2008, 2128, 4200, 5000, 10000"
+    },
+    {
+      "slug": "obesity",
+      "name": "Obesity",
+      "category": "Hormonal & Metabolic",
+      "frequencies_hz": [
+        10000.0
+      ],
+      "frequencies_display": "10000"
+    },
+    {
+      "slug": "pancreas",
+      "name": "Pancreas",
+      "category": "Hormonal & Metabolic",
+      "frequencies_hz": [
+        440.0,
+        465.0,
+        600.0,
+        624.0,
+        648.0,
+        728.0,
+        784.0,
+        787.0,
+        880.0,
+        1552.0,
+        2128.0,
+        5000.0,
+        10000.0
+      ],
+      "frequencies_display": "440, 465, 600, 624, 648, 728, 784, 787, 880, 1552, 2128, 5000, 10000"
+    },
+    {
+      "slug": "aids",
+      "name": "AIDS",
+      "category": "Immune & Infection",
+      "frequencies_hz": [
+        727.0,
+        787.0,
+        880.0,
+        2489.0,
+        5000.0,
+        31000.0,
+        31750.0,
+        34750.0
+      ],
+      "frequencies_display": "727, 787, 880, 2489, 5000, 31000, 31750, 34750"
+    },
+    {
+      "slug": "allergies",
+      "name": "Allergies",
+      "category": "Immune & Infection",
+      "frequencies_hz": [
+        3.0,
+        20.0,
+        125.0,
+        727.0,
+        787.0,
+        880.0,
+        5000.0,
+        10000.0
+      ],
+      "frequencies_display": "3, 20, 125, 727, 787, 880, 5000, 10000"
+    },
+    {
+      "slug": "cancer-breast",
+      "name": "Cancer, Breast",
+      "category": "Immune & Infection",
+      "frequencies_hz": [
+        20.0,
+        465.0,
+        660.0,
+        665.0,
+        690.0,
+        727.0,
+        740.0,
+        787.0,
+        800.0,
+        880.0,
+        1840.0,
+        1998.0,
+        2008.0,
+        2128.0,
+        2876.0,
+        5000.0,
+        10000.0
+      ],
+      "frequencies_display": "20, 465, 660, 665, 690, 727, 740, 787, 800, 880, 1840, 1998, 2008, 2128, 2876, 5000, 10000"
+    },
+    {
+      "slug": "cancer-carcinoma",
+      "name": "Cancer, Carcinoma",
+      "category": "Immune & Infection",
+      "frequencies_hz": [
+        20.0,
+        120.0,
+        333.0,
+        452.0,
+        464.0,
+        660.0,
+        666.0,
+        690.0,
+        683.0,
+        728.0,
+        740.0,
+        784.0,
+        787.0,
+        794.0,
+        800.0,
+        880.0,
+        1560.0,
+        1577.0,
+        1840.0,
+        1998.0,
+        2008.0,
+        2050.0,
+        2084.0,
+        2128.0,
+        2182.0,
+        2720.0,
+        2876.0,
+        3176.0,
+        5000.0,
+        6064.0,
+        10000.0,
+        304.0
+      ],
+      "frequencies_display": "20, 120, 333, 452, 464, 660, 666, 690, 683, 728, 740, 784, 787, 794, 800, 880, 1560, 1577, 1840, 1998, 2008, 2050, 2084, 2128, 2182, 2720, 2876, 3176, 5000, 6064, 10000, 304"
+    },
+    {
+      "slug": "cancer-leukemia",
+      "name": "Cancer, Leukemia",
+      "category": "Immune & Infection",
+      "frequencies_hz": [
+        2128.0,
+        2008.0,
+        880.0,
+        787.0,
+        727.0,
+        690.0,
+        666.0,
+        590.0,
+        10000.0,
+        1850.0,
+        450.0,
+        440.0,
+        428.0,
+        14.0,
+        15.0,
+        2030.0,
+        465.0
+      ],
+      "frequencies_display": "2128, 2008, 880, 787, 727, 690, 666, 590, 10000, 1850, 450, 440, 428, 14, 15, 2030, 465"
+    },
+    {
+      "slug": "cancer-sarcoma",
+      "name": "Cancer, Sarcoma",
+      "category": "Immune & Infection",
+      "frequencies_hz": [
+        20.0,
+        465.0,
+        660.0,
+        665.0,
+        690.0,
+        727.0,
+        740.0,
+        787.0,
+        800.0,
+        880.0,
+        979.0,
+        1840.0,
+        1998.0,
+        2004.0,
+        2008.0,
+        2012.0,
+        2128.0,
+        3672.0,
+        5000.0,
+        7760.0,
+        10000.0
+      ],
+      "frequencies_display": "20, 465, 660, 665, 690, 727, 740, 787, 800, 880, 979, 1840, 1998, 2004, 2008, 2012, 2128, 3672, 5000, 7760, 10000"
+    },
+    {
+      "slug": "chlamydia",
+      "name": "Chlamydia",
+      "category": "Immune & Infection",
+      "frequencies_hz": [
+        430.0,
+        620.0,
+        866.0,
+        2213.0
+      ],
+      "frequencies_display": "430, 620, 866, 2213"
+    },
+    {
+      "slug": "diphtheria",
+      "name": "Diphtheria",
+      "category": "Immune & Infection",
+      "frequencies_hz": [
+        20.0,
+        727.0,
+        787.0,
+        880.0
+      ],
+      "frequencies_display": "20, 727, 787, 880"
+    },
+    {
+      "slug": "e-coli",
+      "name": "E. Coli",
+      "category": "Immune & Infection",
+      "frequencies_hz": [
+        801.5
+      ],
+      "frequencies_display": "799-804"
+    },
+    {
+      "slug": "epstein-barr",
+      "name": "Epstein-Barr",
+      "category": "Immune & Infection",
+      "frequencies_hz": [
+        660.0,
+        665.0,
+        690.0,
+        727.0,
+        787.0
+      ],
+      "frequencies_display": "660, 665, 690, 727, 787"
+    },
+    {
+      "slug": "fever-all-kinds",
+      "name": "Fever (all kinds)",
+      "category": "Immune & Infection",
+      "frequencies_hz": [
+        20.0,
+        727.0,
+        787.0,
+        880.0,
+        5000.0,
+        10000.0
+      ],
+      "frequencies_display": "20, 727, 787, 880, 5000, 10000"
+    },
+    {
+      "slug": "flu",
+      "name": "Flu",
+      "category": "Immune & Infection",
+      "frequencies_hz": [
+        727.0,
+        770.0,
+        776.0,
+        780.0,
+        787.0,
+        800.0,
+        880.0,
+        965.0,
+        5375.0,
+        7760.0,
+        7766.0,
+        8000.0,
+        8208.0,
+        8250.0,
+        8700.0
+      ],
+      "frequencies_display": "727, 770, 776, 780, 787, 800, 880, 965, 5375, 7760, 7766, 8000, 8198-8218, 8250, 8700"
+    },
+    {
+      "slug": "hepatitis-a",
+      "name": "Hepatitis A",
+      "category": "Immune & Infection",
+      "frequencies_hz": [
+        321.0,
+        346.0,
+        414.0,
+        423.0,
+        487.0,
+        558.0,
+        578.0,
+        693.0,
+        717.0,
+        786.0,
+        878.0,
+        3220.0
+      ],
+      "frequencies_display": "321, 346, 414, 423, 487, 558, 578, 693, 717, 786, 878, 3220"
+    },
+    {
+      "slug": "hepatitis-b",
+      "name": "Hepatitis B",
+      "category": "Immune & Infection",
+      "frequencies_hz": [
+        334.0,
+        433.0,
+        477.0,
+        574.0,
+        752.0,
+        767.0,
+        779.0,
+        869.0,
+        876.0
+      ],
+      "frequencies_display": "334, 433, 477, 574, 752, 767, 779, 869, 876"
+    },
+    {
+      "slug": "herpes-zoster",
+      "name": "Herpes Zoster",
+      "category": "Immune & Infection",
+      "frequencies_hz": [
+        664.0,
+        787.0,
+        802.0,
+        880.0,
+        914.0,
+        1500.0,
+        1600.0,
+        2170.0,
+        3343.0
+      ],
+      "frequencies_display": "664, 787, 802, 880, 914, 1500, 1600, 2170, 3343"
+    },
+    {
+      "slug": "herpes-general",
+      "name": "Herpes, General",
+      "category": "Immune & Infection",
+      "frequencies_hz": [
+        464.0,
+        1488.0,
+        1489.0,
+        1500.0,
+        1550.0,
+        1577.0,
+        1900.0
+      ],
+      "frequencies_display": "464, 1488, 1489, 1500, 1550, 1577, 1900"
+    },
+    {
+      "slug": "influenza",
+      "name": "Influenza",
+      "category": "Immune & Infection",
+      "frequencies_hz": [
+        727.0,
+        770.0,
+        776.0,
+        780.0,
+        787.0,
+        800.0,
+        880.0,
+        5375.0,
+        7760.0,
+        8000.0,
+        8250.0
+      ],
+      "frequencies_display": "727, 770, 776, 780, 787, 800, 880, 5375, 7760, 8000, 8250"
+    },
+    {
+      "slug": "leprosy",
+      "name": "Leprosy",
+      "category": "Immune & Infection",
+      "frequencies_hz": [
+        600.0,
+        727.0,
+        787.0,
+        880.0,
+        10000.0
+      ],
+      "frequencies_display": "600, 727, 787, 880, 10000"
+    },
+    {
+      "slug": "lupus-sle",
+      "name": "Lupus (SLE)",
+      "category": "Immune & Infection",
+      "frequencies_hz": [
+        304.0,
+        633.0,
+        664.0,
+        702.0,
+        784.0,
+        802.0,
+        880.0,
+        1552.0,
+        2008.0,
+        2125.0,
+        2128.0,
+        2180.0,
+        2489.0,
+        3612.0
+      ],
+      "frequencies_display": "304, 633, 664, 702, 784, 802, 880, 1552, 2008, 2125, 2128, 2180, 2489, 3612"
+    },
+    {
+      "slug": "lyme-disease",
+      "name": "Lyme Disease",
+      "category": "Immune & Infection",
+      "frequencies_hz": [
+        312.0,
+        345.0,
+        432.0,
+        494.0,
+        613.0,
+        690.0,
+        790.0,
+        800.0,
+        864.0,
+        1615.0
+      ],
+      "frequencies_display": "312, 345, 432, 484-504, 592-634, 690, 785-795, 800, 864, 1590-1640"
+    },
+    {
+      "slug": "lymph-glands",
+      "name": "Lymph Glands",
+      "category": "Immune & Infection",
+      "frequencies_hz": [
+        10.0,
+        440.0,
+        880.0
+      ],
+      "frequencies_display": "10, 440, 880"
+    },
+    {
+      "slug": "malaria",
+      "name": "Malaria",
+      "category": "Immune & Infection",
+      "frequencies_hz": [
+        20.0,
+        728.0,
+        787.0,
+        880.0
+      ],
+      "frequencies_display": "20, 728, 787, 880"
+    },
+    {
+      "slug": "measles",
+      "name": "Measles",
+      "category": "Immune & Infection",
+      "frequencies_hz": [
+        20.0,
+        727.0,
+        787.0,
+        880.0
+      ],
+      "frequencies_display": "20, 727, 787, 880"
+    },
+    {
+      "slug": "mumps",
+      "name": "Mumps",
+      "category": "Immune & Infection",
+      "frequencies_hz": [
+        152.0,
+        242.0,
+        642.0,
+        674.0,
+        727.0,
+        787.0,
+        880.0,
+        922.0
+      ],
+      "frequencies_display": "152, 242, 642, 674, 727, 787, 880, 922"
+    },
+    {
+      "slug": "smallpox",
+      "name": "Smallpox",
+      "category": "Immune & Infection",
+      "frequencies_hz": [
+        20.0,
+        727.0,
+        787.0,
+        880.0
+      ],
+      "frequencies_display": "20, 727, 787, 880"
+    },
+    {
+      "slug": "staph-infections",
+      "name": "Staph Infections",
+      "category": "Immune & Infection",
+      "frequencies_hz": [
+        727.0,
+        727.5,
+        787.0,
+        880.0,
+        885.0
+      ],
+      "frequencies_display": "727, 725-730, 787, 880, 885"
+    },
+    {
+      "slug": "streptococcus",
+      "name": "Streptococcus",
+      "category": "Immune & Infection",
+      "frequencies_hz": [
+        880.0,
+        880.0
+      ],
+      "frequencies_display": "875-885, 880"
+    },
+    {
+      "slug": "tetanus",
+      "name": "Tetanus",
+      "category": "Immune & Infection",
+      "frequencies_hz": [
+        20.0,
+        120.0,
+        400.0,
+        727.0,
+        787.0,
+        880.0
+      ],
+      "frequencies_display": "20, 120, 400, 727, 787, 880"
+    },
+    {
+      "slug": "typhoid-fever",
+      "name": "Typhoid Fever",
+      "category": "Immune & Infection",
+      "frequencies_hz": [
+        20.0,
+        690.0,
+        712.0,
+        1550.0,
+        1570.0,
+        1862.0,
+        1865.0
+      ],
+      "frequencies_display": "20, 690, 712, 1500-1600, 1570, 1862, 1865"
+    },
+    {
+      "slug": "anxiety",
+      "name": "Anxiety",
+      "category": "Mental & Emotional",
+      "frequencies_hz": [
+        304.0,
+        6130.0
+      ],
+      "frequencies_display": "304, 6130"
+    },
+    {
+      "slug": "depression",
+      "name": "Depression",
+      "category": "Mental & Emotional",
+      "frequencies_hz": [
+        664.0,
+        764.0
+      ],
+      "frequencies_display": "664, 764"
+    },
+    {
+      "slug": "general-relaxation",
+      "name": "General Relaxation",
+      "category": "Mental & Emotional",
+      "frequencies_hz": [
+        10.0,
+        304.0,
+        727.0,
+        787.0
+      ],
+      "frequencies_display": "10, 304, 727, 787"
+    },
+    {
+      "slug": "insomnia",
+      "name": "Insomnia",
+      "category": "Mental & Emotional",
+      "frequencies_hz": [
+        727.0,
+        787.0,
+        880.0,
+        10000.0
+      ],
+      "frequencies_display": "727, 787, 880, 10000"
+    },
+    {
+      "slug": "neurosis",
+      "name": "Neurosis",
+      "category": "Mental & Emotional",
+      "frequencies_hz": [
+        727.0,
+        787.0,
+        880.0,
+        5000.0,
+        10000.0
+      ],
+      "frequencies_display": "727, 787, 880, 5000, 10000"
+    },
+    {
+      "slug": "arthritis-general",
+      "name": "Arthritis - General",
+      "category": "Musculoskeletal",
+      "frequencies_hz": [
+        727.0,
+        784.0,
+        787.0,
+        800.0,
+        880.0,
+        1550.0,
+        1552.0,
+        2720.0,
+        4200.0,
+        5000.0,
+        10000.0
+      ],
+      "frequencies_display": "727, 784, 787, 800, 880, 1550, 1552, 2720, 4200, 5000, 10000"
+    },
+    {
+      "slug": "backache",
+      "name": "Backache",
+      "category": "Musculoskeletal",
+      "frequencies_hz": [
+        727.0,
+        787.0,
+        880.0,
+        10000.0
+      ],
+      "frequencies_display": "727, 787, 880, 10000"
+    },
+    {
+      "slug": "fibromyalgia",
+      "name": "Fibromyalgia",
+      "category": "Musculoskeletal",
+      "frequencies_hz": [
+        120.0,
+        140.0,
+        304.0,
+        464.0,
+        728.0,
+        800.0,
+        880.0,
+        2489.0,
+        3176.0,
+        5000.0,
+        6000.0,
+        9000.0
+      ],
+      "frequencies_display": "120, 140, 304, 464, 728, 800, 880, 2489, 3176, 5000, 6000, 9000"
+    },
+    {
+      "slug": "gout",
+      "name": "Gout",
+      "category": "Musculoskeletal",
+      "frequencies_hz": [
+        20.0,
+        10000.0
+      ],
+      "frequencies_display": "20, 10000"
+    },
+    {
+      "slug": "muscle-repair",
+      "name": "Muscle Repair",
+      "category": "Musculoskeletal",
+      "frequencies_hz": [
+        120.0,
+        240.0,
+        5000.0
+      ],
+      "frequencies_display": "120, 240, 5000"
+    },
+    {
+      "slug": "muscular-dystrophy",
+      "name": "Muscular Dystrophy",
+      "category": "Musculoskeletal",
+      "frequencies_hz": [
+        5000.0
+      ],
+      "frequencies_display": "5000"
+    },
+    {
+      "slug": "rheumatism",
+      "name": "Rheumatism",
+      "category": "Musculoskeletal",
+      "frequencies_hz": [
+        727.0,
+        787.0,
+        880.0,
+        10000.0
+      ],
+      "frequencies_display": "727, 787, 880, 10000"
+    },
+    {
+      "slug": "brain",
+      "name": "Brain",
+      "category": "Nervous System & Brain",
+      "frequencies_hz": [
+        20.0,
+        1000.0,
+        2000.0
+      ],
+      "frequencies_display": "20, 1000, 2000"
+    },
+    {
+      "slug": "cerebral-palsy",
+      "name": "Cerebral Palsy",
+      "category": "Nervous System & Brain",
+      "frequencies_hz": [
+        727.0,
+        787.0,
+        880.0,
+        10000.0
+      ],
+      "frequencies_display": "727, 787, 880, 10000"
+    },
+    {
+      "slug": "convulsions",
+      "name": "Convulsions",
+      "category": "Nervous System & Brain",
+      "frequencies_hz": [
+        727.0,
+        787.0,
+        880.0,
+        5000.0,
+        10000.0
+      ],
+      "frequencies_display": "727, 787, 880, 5000, 10000"
+    },
+    {
+      "slug": "epilepsy",
+      "name": "Epilepsy",
+      "category": "Nervous System & Brain",
+      "frequencies_hz": [
+        20.0,
+        120.0,
+        727.0,
+        787.0,
+        880.0
+      ],
+      "frequencies_display": "20, 120, 727, 787, 880"
+    },
+    {
+      "slug": "meningitis",
+      "name": "Meningitis",
+      "category": "Nervous System & Brain",
+      "frequencies_hz": [
+        20.0,
+        5000.0
+      ],
+      "frequencies_display": "20, 5000"
+    },
+    {
+      "slug": "multiple-sclerosis",
+      "name": "Multiple Sclerosis",
+      "category": "Nervous System & Brain",
+      "frequencies_hz": [
+        20.0,
+        166.0,
+        218.0,
+        224.0,
+        317.0,
+        470.0,
+        727.0,
+        787.0,
+        807.0,
+        880.0,
+        5000.0
+      ],
+      "frequencies_display": "20, 166, 218, 224, 317, 470, 727, 787, 807, 880, 5000"
+    },
+    {
+      "slug": "neuritis",
+      "name": "Neuritis",
+      "category": "Nervous System & Brain",
+      "frequencies_hz": [
+        727.0,
+        787.0,
+        880.0,
+        5000.0,
+        10000.0
+      ],
+      "frequencies_display": "727, 787, 880, 5000, 10000"
+    },
+    {
+      "slug": "parkinson-s",
+      "name": "Parkinson's",
+      "category": "Nervous System & Brain",
+      "frequencies_hz": [
+        6000.0
+      ],
+      "frequencies_display": "6000"
+    },
+    {
+      "slug": "abdominal-pain",
+      "name": "Abdominal Pain",
+      "category": "Pain & Inflammation",
+      "frequencies_hz": [
+        5000.0,
+        10000.0
+      ],
+      "frequencies_display": "5000, 10000"
+    },
+    {
+      "slug": "bruises",
+      "name": "Bruises",
+      "category": "Pain & Inflammation",
+      "frequencies_hz": [
+        10000.0
+      ],
+      "frequencies_display": "10000"
+    },
+    {
+      "slug": "burns",
+      "name": "Burns",
+      "category": "Pain & Inflammation",
+      "frequencies_hz": [
+        727.0,
+        787.0,
+        880.0,
+        10000.0
+      ],
+      "frequencies_display": "727, 787, 880, 10000"
+    },
+    {
+      "slug": "general-pain-relief",
+      "name": "General Pain Relief",
+      "category": "Pain & Inflammation",
+      "frequencies_hz": [
+        304.0,
+        727.0,
+        787.0,
+        880.0,
+        10000.0
+      ],
+      "frequencies_display": "304, 727, 787, 880, 10000"
+    },
+    {
+      "slug": "headaches",
+      "name": "Headaches",
+      "category": "Pain & Inflammation",
+      "frequencies_hz": [
+        20.0,
+        144.0,
+        160.0,
+        304.0,
+        520.0,
+        727.0,
+        787.0,
+        880.0,
+        10000.0
+      ],
+      "frequencies_display": "20, 144, 160, 304, 520, 727, 787, 880, 10000"
+    },
+    {
+      "slug": "migraine",
+      "name": "Migraine",
+      "category": "Pain & Inflammation",
+      "frequencies_hz": [
+        20.0,
+        727.0,
+        787.0,
+        880.0,
+        5000.0
+      ],
+      "frequencies_display": "20, 727, 787, 880, 5000"
+    },
+    {
+      "slug": "candida-albicans",
+      "name": "Candida Albicans",
+      "category": "Parasites & Fungal",
+      "frequencies_hz": [
+        254.0,
+        414.0,
+        450.0,
+        465.0
+      ],
+      "frequencies_display": "254, 414, 450, 465"
+    },
+    {
+      "slug": "fungus",
+      "name": "Fungus",
+      "category": "Parasites & Fungal",
+      "frequencies_hz": [
+        333.0,
+        450.0,
+        465.0,
+        665.0,
+        690.0,
+        727.0,
+        784.0,
+        880.0,
+        1550.0,
+        1654.0
+      ],
+      "frequencies_display": "333, 450, 465, 665, 690, 727, 784, 880, 1550, 1654"
+    },
+    {
+      "slug": "giardia",
+      "name": "Giardia",
+      "category": "Parasites & Fungal",
+      "frequencies_hz": [
+        1943.0
+      ],
+      "frequencies_display": "1943"
+    },
+    {
+      "slug": "parasites-general",
+      "name": "Parasites, General",
+      "category": "Parasites & Fungal",
+      "frequencies_hz": [
+        20.0,
+        47.0,
+        60.0,
+        64.0,
+        72.0,
+        96.0,
+        112.0,
+        120.0,
+        125.0,
+        128.0,
+        152.0,
+        240.0,
+        334.0,
+        422.0,
+        442.0,
+        465.0,
+        524.0,
+        642.0,
+        644.0,
+        651.0,
+        669.0,
+        666.0,
+        676.0,
+        688.0,
+        690.0,
+        712.0,
+        728.0,
+        732.0,
+        740.0,
+        751.0,
+        770.0,
+        780.0,
+        784.0,
+        787.0,
+        800.0,
+        802.0,
+        854.0,
+        880.0,
+        1360.0,
+        1550.0,
+        1552.0,
+        1840.0,
+        1862.0,
+        1864.0,
+        1998.0,
+        2008.0,
+        2112.0,
+        2128.0,
+        3176.0,
+        4412.0,
+        10000.0
+      ],
+      "frequencies_display": "20, 47, 60, 64, 72, 96, 112, 120, 125, 128, 152, 240, 334, 422, 442, 465, 524, 642, 644, 651, 669, 666, 676, 688, 690, 712, 728, 732, 740, 751, 770, 780, 784, 787, 800, 802, 854, 880, 1360, 1550, 1552, 1840, 1862, 1864, 1998, 2008, 2112, 2128, 3176, 4412, 10000"
+    },
+    {
+      "slug": "worms-round",
+      "name": "Worms, Round",
+      "category": "Parasites & Fungal",
+      "frequencies_hz": [
+        20.0,
+        104.0,
+        120.0,
+        240.0,
+        332.0,
+        422.0,
+        688.0,
+        721.0,
+        942.0,
+        1360.0,
+        3212.0
+      ],
+      "frequencies_display": "20, 104, 120, 240, 332, 422, 688, 721, 942, 1360, 3212"
+    },
+    {
+      "slug": "cystitis",
+      "name": "Cystitis",
+      "category": "Reproductive & Urinary",
+      "frequencies_hz": [
+        727.0,
+        787.0,
+        800.0,
+        880.0
+      ],
+      "frequencies_display": "727, 787, 800, 880"
+    },
+    {
+      "slug": "dysmenorrhea",
+      "name": "Dysmenorrhea",
+      "category": "Reproductive & Urinary",
+      "frequencies_hz": [
+        727.0,
+        787.0,
+        800.0,
+        880.0
+      ],
+      "frequencies_display": "727, 787, 800, 880"
+    },
+    {
+      "slug": "gonorrhea",
+      "name": "Gonorrhea",
+      "category": "Reproductive & Urinary",
+      "frequencies_hz": [
+        600.0,
+        650.0,
+        660.0,
+        700.0,
+        712.0
+      ],
+      "frequencies_display": "600, 650, 660, 700, 712"
+    },
+    {
+      "slug": "herpes-genital",
+      "name": "Herpes, Genital",
+      "category": "Reproductive & Urinary",
+      "frequencies_hz": [
+        141.0,
+        171.0,
+        440.0,
+        590.0,
+        660.0,
+        878.0,
+        898.0,
+        1175.0,
+        5310.0
+      ],
+      "frequencies_display": "141, 171, 440, 590, 660, 878, 898, 1175, 5310"
+    },
+    {
+      "slug": "kidneys",
+      "name": "Kidneys",
+      "category": "Reproductive & Urinary",
+      "frequencies_hz": [
+        8.0,
+        9.2,
+        20.0,
+        248.0,
+        440.0,
+        727.0,
+        787.0,
+        880.0,
+        1600.0,
+        1865.0,
+        10000.0
+      ],
+      "frequencies_display": "8, 9.2, 20, 248, 440, 727, 787, 880, 1600, 1865, 10000"
+    },
+    {
+      "slug": "leukorrhea",
+      "name": "Leukorrhea",
+      "category": "Reproductive & Urinary",
+      "frequencies_hz": [
+        465.0,
+        727.0,
+        787.0,
+        880.0
+      ],
+      "frequencies_display": "465, 727, 787, 880"
+    },
+    {
+      "slug": "prostate-gland",
+      "name": "Prostate Gland",
+      "category": "Reproductive & Urinary",
+      "frequencies_hz": [
+        9.4,
+        20.0,
+        404.0,
+        664.0,
+        727.0,
+        1000.0,
+        2000.0,
+        2008.0,
+        2128.0,
+        2720.0,
+        5000.0
+      ],
+      "frequencies_display": "9.4, 20, 404, 664, 727, 1000, 2000, 2008, 2128, 2720, 5000"
+    },
+    {
+      "slug": "syphilis",
+      "name": "Syphilis",
+      "category": "Reproductive & Urinary",
+      "frequencies_hz": [
+        20.0,
+        600.0,
+        625.0,
+        650.0,
+        700.0
+      ],
+      "frequencies_display": "20, 600, 625, 650, 700"
+    },
+    {
+      "slug": "asthma",
+      "name": "Asthma",
+      "category": "Respiratory",
+      "frequencies_hz": [
+        727.0,
+        787.0,
+        880.0,
+        1234.0,
+        3672.0,
+        7344.0,
+        5000.0,
+        10000.0
+      ],
+      "frequencies_display": "727, 787, 880, 1234, 3672, 7344, 5000, 10000"
+    },
+    {
+      "slug": "bronchitis",
+      "name": "Bronchitis",
+      "category": "Respiratory",
+      "frequencies_hz": [
+        727.0,
+        880.0,
+        1234.0
+      ],
+      "frequencies_display": "727, 880, 1234"
+    },
+    {
+      "slug": "coryza-nose-disorder",
+      "name": "Coryza (Nose Disorder)",
+      "category": "Respiratory",
+      "frequencies_hz": [
+        727.0,
+        787.0,
+        880.0
+      ],
+      "frequencies_display": "727, 787, 880"
+    },
+    {
+      "slug": "hay-fever",
+      "name": "Hay Fever",
+      "category": "Respiratory",
+      "frequencies_hz": [
+        727.0,
+        787.0,
+        880.0,
+        5000.0
+      ],
+      "frequencies_display": "727, 787, 880, 5000"
+    },
+    {
+      "slug": "pneumonia",
+      "name": "Pneumonia",
+      "category": "Respiratory",
+      "frequencies_hz": [
+        20.0,
+        727.0,
+        775.0,
+        787.0,
+        800.0,
+        880.0,
+        5000.0,
+        10000.0
+      ],
+      "frequencies_display": "20, 727, 770-780, 787, 800, 880, 5000, 10000"
+    },
+    {
+      "slug": "sinusitis",
+      "name": "Sinusitis",
+      "category": "Respiratory",
+      "frequencies_hz": [
+        20.0,
+        160.0,
+        320.0,
+        741.0,
+        952.0,
+        727.0,
+        776.0,
+        1550.0
+      ],
+      "frequencies_display": "20, 160, 320, 741, 952, 727, 776, 1550"
+    },
+    {
+      "slug": "tuberculosis",
+      "name": "Tuberculosis",
+      "category": "Respiratory",
+      "frequencies_hz": [
+        20.0,
+        800.0,
+        1550.0
+      ],
+      "frequencies_display": "20, 800, 1550"
+    },
+    {
+      "slug": "tuberculosis-rod",
+      "name": "Tuberculosis Rod",
+      "category": "Respiratory",
+      "frequencies_hz": [
+        216.0,
+        666.0,
+        690.0,
+        740.0,
+        799.0,
+        802.0,
+        803.0,
+        804.0,
+        1840.0
+      ],
+      "frequencies_display": "216, 666, 690, 740, 799, 802, 803, 804, 1840"
+    },
+    {
+      "slug": "whooping-cough",
+      "name": "Whooping Cough",
+      "category": "Respiratory",
+      "frequencies_hz": [
+        20.0,
+        727.0,
+        787.0,
+        880.0
+      ],
+      "frequencies_display": "20, 727, 787, 880"
+    },
+    {
+      "slug": "acne",
+      "name": "Acne",
+      "category": "Skin & Hair",
+      "frequencies_hz": [
+        727.0,
+        787.0,
+        880.0,
+        5000.0
+      ],
+      "frequencies_display": "727, 787, 880, 5000"
+    },
+    {
+      "slug": "alopecia-hair-loss",
+      "name": "Alopecia (Hair Loss)",
+      "category": "Skin & Hair",
+      "frequencies_hz": [
+        727.0,
+        787.0,
+        880.0,
+        5000.0,
+        10000.0
+      ],
+      "frequencies_display": "727, 787, 880, 5000, 10000"
+    },
+    {
+      "slug": "athlete-s-foot",
+      "name": "Athlete's Foot",
+      "category": "Skin & Hair",
+      "frequencies_hz": [
+        400.0,
+        727.0,
+        784.0,
+        787.0,
+        880.0,
+        5000.0,
+        10000.0
+      ],
+      "frequencies_display": "400, 727, 784, 787, 880, 5000, 10000"
+    },
+    {
+      "slug": "dandruff-scales",
+      "name": "Dandruff, Scales",
+      "category": "Skin & Hair",
+      "frequencies_hz": [
+        727.0,
+        787.0,
+        880.0,
+        5000.0
+      ],
+      "frequencies_display": "727, 787, 880, 5000"
+    },
+    {
+      "slug": "eczema",
+      "name": "Eczema",
+      "category": "Skin & Hair",
+      "frequencies_hz": [
+        727.0,
+        787.0,
+        5000.0
+      ],
+      "frequencies_display": "727, 787, 5000"
+    },
+    {
+      "slug": "hives-urticaria",
+      "name": "Hives (Urticaria)",
+      "category": "Skin & Hair",
+      "frequencies_hz": [
+        727.0,
+        787.0,
+        880.0,
+        1800.0,
+        5000.0
+      ],
+      "frequencies_display": "727, 787, 880, 1800, 5000"
+    },
+    {
+      "slug": "psoriasis",
+      "name": "Psoriasis",
+      "category": "Skin & Hair",
+      "frequencies_hz": [
+        20.0,
+        64.0,
+        96.0,
+        104.0,
+        112.0,
+        727.0,
+        787.0,
+        880.0,
+        5000.0
+      ],
+      "frequencies_display": "20, 64, 96, 104, 112, 727, 787, 880, 5000"
+    },
+    {
+      "slug": "warts-plantar",
+      "name": "Warts, Plantar",
+      "category": "Skin & Hair",
+      "frequencies_hz": [
+        915.0,
+        918.0
+      ],
+      "frequencies_display": "915, 918"
+    }
+  ]
+}

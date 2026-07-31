@@ -16,10 +16,13 @@
   </style>
 </head>
 <body>
-  <div class="nav"><a href="/generate">&larr; Generate another</a> &middot; <a href="/">Analyze audio</a></div>
+  <div class="nav"><a href="/library">&larr; Frequency library</a> &middot; <a href="/generate">Generate another</a> &middot; <a href="/">Analyze audio</a></div>
 
   <div class="panel">
     <h2>{{ label }}</h2>
+    {% if library_note %}
+      <p style="color:#666; font-size: 13px;">Sequence steps through: {{ library_note }} Hz</p>
+    {% endif %}
     <audio controls preload="metadata" style="width: 100%; margin-top: 10px;" src="{{ download_url }}"></audio>
     <div><a class="download" href="{{ download_url }}" download>Download WAV</a></div>
   </div>
