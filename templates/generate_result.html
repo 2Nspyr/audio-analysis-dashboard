@@ -1,56 +1,26 @@
-<!doctype html>
-<html>
-<head>
-  <meta charset="utf-8">
-  <title>Generated File</title>
-  <style>
-    :root {
-      --bg: #0a0c11; --panel: #151922; --border: #262b38; --border-soft: #1e2330;
-      --text: #e7e9ee; --text-dim: #8b93a7; --text-faint: #5c6478;
-      --accent: #4fd1c5; --accent-glow: rgba(79, 209, 197, 0.35); --radius: 10px;
-    }
-    * { box-sizing: border-box; }
-    body {
-      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Arial, sans-serif;
-      max-width: 640px; margin: 0 auto; padding: 50px 20px 80px;
-      background: radial-gradient(ellipse 900px 500px at 50% -10%, #182035 0%, var(--bg) 55%);
-      color: var(--text); min-height: 100vh;
-    }
-    .site-header {
-      display: flex; justify-content: space-between; align-items: center;
-      margin-bottom: 24px; gap: 16px; flex-wrap: wrap;
-    }
-    .brand-logo { height: 24px; width: auto; opacity: 0.92; display: block; }
-    .nav { font-size: 13px; }
-    .nav a { color: var(--text-dim); text-decoration: none; }
-    .nav a:hover { color: var(--accent); }
-    .panel {
-      border: 1px solid var(--border); border-radius: var(--radius); padding: 18px 22px;
-      margin-bottom: 18px; background: var(--panel);
-    }
-    .panel h2 { font-size: 15px; margin: 0 0 6px; color: var(--text); }
-    .verify { display: flex; justify-content: space-between; align-items: center; padding: 11px 0; border-top: 1px solid var(--border-soft); font-size: 13.5px; }
-    .verify:first-of-type { border-top: none; }
-    .badge { display: inline-block; padding: 3px 10px; border-radius: 10px; font-size: 11.5px; font-weight: 600; letter-spacing: 0.02em; }
-    .badge.yes { background: rgba(79, 209, 197, 0.14); color: var(--accent); }
-    .badge.no { background: rgba(248, 113, 113, 0.14); color: #fca5a5; }
-    a.download {
-      display: inline-block; margin-top: 12px; padding: 11px 24px;
-      background: linear-gradient(135deg, var(--accent), #38b2ac); color: #06211e;
-      text-decoration: none; border-radius: 8px; font-weight: 600; font-size: 14px; letter-spacing: 0.02em;
-      transition: box-shadow 0.15s;
-    }
-    a.download:hover { box-shadow: 0 0 0 4px var(--accent-glow); }
-    audio { filter: invert(0.9) hue-rotate(180deg); border-radius: 6px; }
-    p { color: var(--text-faint); font-size: 12.5px; }
-  </style>
-</head>
-<body>
-  <div class="site-header">
-    <img src="/static/img/logo.png" alt="Brenda Johnston" class="brand-logo">
-    <div class="nav"><a href="/">&larr; Frequency library</a> &middot; <a href="/generate">Generate another</a> &middot; <a href="/analyze">Analyze audio</a></div>
-  </div>
+{% extends "base.html" %}
+{% block title %}Generated File — The Frequency Lab{% endblock %}
+{% block crumb %}<a href="/">The Frequency Lab</a> &middot; <a href="/generate">Create</a>{% endblock %}
 
+{% block extra_style %}
+<style>
+  .panel { max-width: 600px; padding: 18px 22px; margin-bottom: 18px; }
+  .panel h2 { font-size: 15px; margin: 0 0 6px; color: var(--text); }
+  .verify { display: flex; justify-content: space-between; align-items: center; padding: 11px 0; border-top: 1px solid var(--border-soft); font-size: 13.5px; }
+  .verify:first-of-type { border-top: none; }
+  a.download {
+    display: inline-block; margin-top: 12px; padding: 11px 24px;
+    background: linear-gradient(135deg, var(--teal), #38b2ac); color: #06211e;
+    text-decoration: none; border-radius: 8px; font-weight: 600; font-size: 14px; letter-spacing: 0.02em;
+    transition: box-shadow 0.15s;
+  }
+  a.download:hover { box-shadow: 0 0 0 4px var(--teal-glow); }
+  audio { filter: invert(0.9) hue-rotate(180deg); border-radius: 6px; }
+  p { color: var(--text-faint); font-size: 12.5px; }
+</style>
+{% endblock %}
+
+{% block content %}
   <div class="panel">
     <h2>{{ label }}</h2>
     {% if library_note %}
@@ -80,5 +50,6 @@
     {% endif %}
   </div>
   {% endif %}
-</body>
-</html>
+
+  <p><a href="/generate" style="color: var(--teal);">Generate another</a> &middot; <a href="/analyze" style="color: var(--teal);">Analyze audio</a></p>
+{% endblock %}

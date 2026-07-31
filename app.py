@@ -16,6 +16,7 @@ from analysis.binaural import analyze_binaural
 from analysis.isochronic import analyze_isochronic
 import jobs
 import frequency_library
+import icons
 
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 UPLOAD_DIR = os.path.join(BASE_DIR, "static", "uploads")
@@ -39,16 +40,51 @@ def allowed_file(filename):
     return "." in filename and filename.rsplit(".", 1)[1].lower() in ALLOWED_EXT
 
 
+@app.context_processor
+def inject_studio_globals():
+    # Available in every template without threading it through each route:
+    # the sidebar/topbar icons, and helpers for the per-category icon/color
+    # used on the dashboard and library pages.
+    return dict(
+        nav_icons=icons.NAV_ICONS,
+        category_icon=icons.category_icon,
+        category_color=icons.category_color,
+    )
+
+
 @app.route("/", methods=["GET"])
 def index():
-    # The frequency library (search + generate) is the primary experience now;
-    # file/YouTube analysis still works exactly as before, just moved to
-    # /analyze instead of being the landing page.
+    # "Library" in the sidebar: a curated landing page (explore by
+    # intention, browse categories) that links into the full searchable
+    # preset list at /library ("Presets" in the sidebar).
+    categories = frequency_library.get_categories()
+    counts = {cat: len(group) for cat, group in frequency_library.get_grouped_entries()}
     return render_template(
-        "library.html",
-        grouped_entries=frequency_library.get_grouped_entries(),
-        categories=frequency_library.get_categories(),
+        "dashboard.html",
+        categories=categories,
+        counts=counts,
         meta=frequency_library.get_meta(),
+        total_presets=len(frequency_library.get_all_entries()),
+    )
+
+
+@app.route("/exports", methods=["GET"])
+def exports_placeholder():
+    return render_template(
+        "placeholder.html",
+        title="Exports",
+        icon_key="exports",
+        message="A history of the files you've generated and downloaded will live here.",
+    )
+
+
+@app.route("/settings", methods=["GET"])
+def settings_placeholder():
+    return render_template(
+        "placeholder.html",
+        title="Settings",
+        icon_key="settings",
+        message="Account and generation preferences are coming soon.",
     )
 
 

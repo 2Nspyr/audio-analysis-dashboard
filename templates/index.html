@@ -1,68 +1,37 @@
-<!doctype html>
-<html>
-<head>
-  <meta charset="utf-8">
-  <title>Audio Analysis Dashboard</title>
-  <style>
-    :root {
-      --bg: #0a0c11; --panel: #151922; --panel-2: #1a1f2b; --border: #262b38; --border-soft: #1e2330;
-      --text: #e7e9ee; --text-dim: #8b93a7; --text-faint: #5c6478;
-      --accent: #4fd1c5; --accent-soft: rgba(79, 209, 197, 0.14); --accent-glow: rgba(79, 209, 197, 0.35);
-      --radius: 10px;
-    }
-    * { box-sizing: border-box; }
-    body {
-      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Arial, sans-serif;
-      max-width: 640px; margin: 0 auto; padding: 50px 20px 80px;
-      background: radial-gradient(ellipse 900px 500px at 50% -10%, #182035 0%, var(--bg) 55%);
-      color: var(--text); min-height: 100vh;
-    }
-    h1 {
-      font-size: 22px; margin: 0 0 10px; font-weight: 700; letter-spacing: -0.01em;
-      background: linear-gradient(120deg, #f2f4f8, var(--accent));
-      -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent;
-      display: inline-block;
-    }
-    p { color: var(--text-dim); font-size: 14px; line-height: 1.5; }
-    .drop {
-      border: 2px dashed var(--border); border-radius: var(--radius); padding: 40px; text-align: center;
-      margin-top: 20px; background: var(--panel); transition: border-color 0.15s;
-    }
-    .drop:hover { border-color: var(--accent); }
-    input[type=file] { color: var(--text-dim); font-size: 13.5px; }
-    input[type=url] {
-      background: var(--panel-2); border: 1px solid var(--border); color: var(--text);
-      border-radius: 6px;
-    }
-    input[type=url]:focus { outline: none; border-color: var(--accent); box-shadow: 0 0 0 3px var(--accent-soft); }
-    .flash { background: rgba(248, 113, 113, 0.1); border: 1px solid rgba(248, 113, 113, 0.35); color: #fca5a5;
-             padding: 12px 14px; border-radius: 8px; margin-bottom: 16px; font-size: 13.5px; }
-    button {
-      margin-top: 16px; padding: 11px 24px; font-size: 14.5px; font-weight: 600; cursor: pointer;
-      background: linear-gradient(135deg, var(--accent), #38b2ac); color: #06211e; border: none;
-      border-radius: 8px; letter-spacing: 0.02em; transition: box-shadow 0.15s, transform 0.1s;
-    }
-    button:hover { box-shadow: 0 0 0 4px var(--accent-glow); }
-    button:active { transform: scale(0.98); }
-    .divider { text-align: center; color: var(--text-faint); margin: 26px 0; font-size: 12.5px; letter-spacing: 0.05em; }
-    .footer-link { text-align: center; margin-top: 34px; }
-    .footer-link a { color: var(--accent); text-decoration: none; font-size: 14px; }
-    .site-header {
-      display: flex; justify-content: space-between; align-items: center;
-      margin-bottom: 22px; gap: 16px; flex-wrap: wrap;
-    }
-    .brand-logo { height: 24px; width: auto; opacity: 0.92; display: block; }
-    .nav-link { font-size: 13px; }
-    .nav-link a { color: var(--text-dim); text-decoration: none; }
-    .nav-link a:hover { color: var(--accent); }
-  </style>
-</head>
-<body>
-  <div class="site-header">
-    <img src="/static/img/logo.png" alt="Brenda Johnston" class="brand-logo">
-    <div class="nav-link"><a href="/">&larr; Frequency library</a></div>
-  </div>
-  <h1>Audio Frequency &amp; Tuning Analysis</h1>
+{% extends "base.html" %}
+{% block title %}Analyze Audio — The Frequency Lab{% endblock %}
+{% block crumb %}<a href="/">The Frequency Lab</a> &middot; Analyze Audio{% endblock %}
+
+{% block extra_style %}
+<style>
+  h1.page-title { font-family: var(--serif); font-size: 30px; margin: 0 0 10px; color: var(--gold); font-weight: 700; }
+  p { color: var(--text-dim); font-size: 14px; line-height: 1.5; max-width: 560px; }
+  .drop {
+    border: 2px dashed var(--border); border-radius: var(--radius); padding: 40px; text-align: center;
+    margin-top: 20px; background: var(--panel); transition: border-color 0.15s; max-width: 560px;
+  }
+  .drop:hover { border-color: var(--teal); }
+  input[type=file] { color: var(--text-dim); font-size: 13.5px; }
+  input[type=url] {
+    background: var(--panel-2); border: 1px solid var(--border); color: var(--text);
+    border-radius: 6px; max-width: 560px;
+  }
+  input[type=url]:focus { outline: none; border-color: var(--teal); box-shadow: 0 0 0 3px var(--teal-soft); }
+  .flash { background: rgba(248, 113, 113, 0.1); border: 1px solid rgba(248, 113, 113, 0.35); color: #fca5a5;
+           padding: 12px 14px; border-radius: 8px; margin-bottom: 16px; font-size: 13.5px; max-width: 560px; }
+  button {
+    margin-top: 16px; padding: 11px 24px; font-size: 14.5px; font-weight: 600; cursor: pointer;
+    background: linear-gradient(135deg, var(--teal), #38b2ac); color: #06211e; border: none;
+    border-radius: 8px; letter-spacing: 0.02em; transition: box-shadow 0.15s, transform 0.1s;
+  }
+  button:hover { box-shadow: 0 0 0 4px var(--teal-glow); }
+  button:active { transform: scale(0.98); }
+  .divider { color: var(--text-faint); margin: 26px 0; font-size: 12.5px; letter-spacing: 0.05em; max-width: 560px; }
+</style>
+{% endblock %}
+
+{% block content %}
+  <h1 class="page-title">Audio Frequency &amp; Tuning Analysis</h1>
   <p>Upload a wav or mp3 file to get a tuning, spectral, binaural, isochronic, and harmonic balance report.</p>
 
   {% with messages = get_flashed_messages() %}
@@ -94,8 +63,5 @@
     verification use like this.
   </p>
 
-  <div class="footer-link">
-    <a href="/generate">Generate a frequency file instead &rarr;</a>
-  </div>
-</body>
-</html>
+  <p><a href="/generate" style="color: var(--teal);">Generate a frequency file instead &rarr;</a></p>
+{% endblock %}

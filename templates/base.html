@@ -1,0 +1,162 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>{% block title %}The Frequency Lab{% endblock %}</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,600;0,700;1,600&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #07090a;
+      --bg-radial: radial-gradient(ellipse 1100px 620px at 26% -8%, #10241e 0%, var(--bg) 55%);
+      --sidebar-bg: #0a0d0a;
+      --panel: #10130f;
+      --panel-2: #141810;
+      --border: #212821;
+      --border-soft: #171c17;
+      --text: #ece7dc;
+      --text-dim: #9aa398;
+      --text-faint: #5c655c;
+      --gold: #cda875;
+      --gold-soft: rgba(205, 168, 117, 0.14);
+      --gold-line: rgba(205, 168, 117, 0.35);
+      --teal: #4fd1c5;
+      --teal-soft: rgba(79, 209, 197, 0.14);
+      --teal-glow: rgba(79, 209, 197, 0.32);
+      --radius: 12px;
+      --serif: 'Playfair Display', Georgia, serif;
+      --sans: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Arial, sans-serif;
+    }
+    * { box-sizing: border-box; }
+    html, body { margin: 0; padding: 0; }
+    body {
+      font-family: var(--sans);
+      background: var(--bg-radial);
+      color: var(--text);
+      min-height: 100vh;
+    }
+    a { color: inherit; }
+
+    .app-shell { display: flex; min-height: 100vh; }
+
+    /* --- Sidebar --- */
+    .sidebar {
+      width: 250px; flex-shrink: 0; background: var(--sidebar-bg);
+      border-right: 1px solid var(--border-soft);
+      display: flex; flex-direction: column; padding: 26px 20px;
+      position: sticky; top: 0; height: 100vh;
+    }
+    .sidebar-logo { display: block; margin-bottom: 2px; }
+    .sidebar-logo img { height: 30px; width: auto; display: block; }
+    .sidebar-product {
+      color: var(--gold); font-size: 10px; letter-spacing: 0.16em; font-weight: 600;
+      margin: 6px 0 30px 2px; text-transform: uppercase;
+    }
+    .sidebar-nav { display: flex; flex-direction: column; gap: 2px; }
+    .sidebar-nav a {
+      display: flex; align-items: center; gap: 12px; padding: 10px 12px; border-radius: 8px;
+      text-decoration: none; color: var(--text-dim); font-size: 14px; font-weight: 500;
+      transition: background 0.12s, color 0.12s;
+    }
+    .sidebar-nav a svg { width: 17px; height: 17px; flex-shrink: 0; }
+    .sidebar-nav a:hover { background: var(--panel); color: var(--text); }
+    .sidebar-nav a.active {
+      background: linear-gradient(90deg, var(--teal-soft), transparent);
+      color: var(--text); border-left: 2px solid var(--teal); padding-left: 10px;
+    }
+    .sidebar-spacer { flex: 1; }
+    .sidebar-quote {
+      font-family: var(--serif); font-style: italic; color: var(--text-dim); font-size: 14px;
+      line-height: 1.5; padding: 0 4px 18px; border-bottom: 1px solid var(--border-soft); margin-bottom: 16px;
+    }
+    .sidebar-quote::before { content: ''; display: block; width: 26px; height: 1px; background: var(--gold-line); margin-bottom: 12px; }
+    .sidebar-profile {
+      display: flex; align-items: center; gap: 10px; padding: 8px; border-radius: 10px;
+    }
+    .sidebar-profile .avatar {
+      width: 34px; height: 34px; border-radius: 50%; flex-shrink: 0;
+      background: linear-gradient(135deg, var(--teal), #2b8a82);
+      display: flex; align-items: center; justify-content: center;
+      color: #06211e; font-weight: 700; font-size: 13px; font-family: var(--sans);
+    }
+    .sidebar-profile .who { line-height: 1.35; }
+    .sidebar-profile .who .name { font-size: 13.5px; font-weight: 600; color: var(--text); }
+    .sidebar-profile .who .role { font-size: 11.5px; color: var(--text-faint); }
+
+    /* --- Main column --- */
+    .main-col { flex: 1; min-width: 0; }
+    .topbar {
+      display: flex; justify-content: space-between; align-items: center;
+      padding: 22px 40px; border-bottom: 1px solid var(--border-soft);
+    }
+    .topbar-crumb { color: var(--text-dim); font-size: 13px; }
+    .topbar-crumb a { text-decoration: none; color: var(--text-dim); }
+    .topbar-crumb a:hover { color: var(--teal); }
+    .btn-pill {
+      display: inline-flex; align-items: center; gap: 8px; padding: 9px 18px;
+      border: 1px solid var(--gold-line); border-radius: 999px; text-decoration: none;
+      color: var(--gold); font-size: 13.5px; font-weight: 600; letter-spacing: 0.02em;
+      background: var(--gold-soft); transition: background 0.12s, box-shadow 0.12s;
+    }
+    .btn-pill svg { width: 15px; height: 15px; }
+    .btn-pill:hover { background: rgba(205, 168, 117, 0.22); box-shadow: 0 0 0 3px rgba(205, 168, 117, 0.12); }
+
+    .content { padding: 40px; max-width: 1180px; }
+
+    /* --- Shared components used across pages --- */
+    .panel {
+      border: 1px solid var(--border); border-radius: var(--radius); padding: 18px 22px;
+      background: var(--panel);
+    }
+    .badge { display: inline-block; padding: 3px 10px; border-radius: 10px; font-size: 11.5px; font-weight: 600; letter-spacing: 0.02em; }
+    .badge.yes { background: var(--teal-soft); color: var(--teal); }
+    .badge.no { background: rgba(139, 147, 167, 0.14); color: var(--text-dim); }
+
+    @media (max-width: 880px) {
+      .sidebar { display: none; }
+      .content { padding: 24px; }
+      .topbar { padding: 18px 20px; }
+    }
+  </style>
+  {% block extra_style %}{% endblock %}
+</head>
+<body>
+  <div class="app-shell">
+    <aside class="sidebar">
+      <a class="sidebar-logo" href="/"><img src="/static/img/logo.png" alt="Brenda Johnston"></a>
+      <div class="sidebar-product">The Frequency Lab</div>
+
+      <nav class="sidebar-nav">
+        <a href="/generate" class="{{ 'active' if request.path == '/generate' else '' }}">{{ nav_icons.create|safe }} Create</a>
+        <a href="/" class="{{ 'active' if request.path == '/' else '' }}">{{ nav_icons.library|safe }} Library</a>
+        <a href="/library" class="{{ 'active' if request.path.startswith('/library') else '' }}">{{ nav_icons.presets|safe }} Presets</a>
+        <a href="/exports" class="{{ 'active' if request.path == '/exports' else '' }}">{{ nav_icons.exports|safe }} Exports</a>
+        <a href="/settings" class="{{ 'active' if request.path == '/settings' else '' }}">{{ nav_icons.settings|safe }} Settings</a>
+      </nav>
+
+      <div class="sidebar-spacer"></div>
+
+      <div class="sidebar-quote">Energy speaks before your mouth even opens.</div>
+      <div class="sidebar-profile">
+        <div class="avatar">BJ</div>
+        <div class="who">
+          <div class="name">Brenda Johnston</div>
+          <div class="role">The Frequency Lab</div>
+        </div>
+      </div>
+    </aside>
+
+    <div class="main-col">
+      <div class="topbar">
+        <div class="topbar-crumb">{% block crumb %}<a href="/">The Frequency Lab</a>{% endblock %}</div>
+        <a class="btn-pill" href="/analyze">{{ nav_icons.mic|safe }} Analyze Audio</a>
+      </div>
+      <main class="content">
+        {% block content %}{% endblock %}
+      </main>
+    </div>
+  </div>
+  {% block extra_script %}{% endblock %}
+</body>
+</html>
