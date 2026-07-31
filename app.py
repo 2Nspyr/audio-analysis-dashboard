@@ -1,8 +1,9 @@
 import os
 import uuid
+import threading
 import traceback
 
-from flask import Flask, request, render_template, redirect, url_for, flash
+from flask import Flask, request, render_template, redirect, url_for, flash, jsonify
 
 from audio_io import load_audio, AudioLoadError
 from report import build_report
@@ -13,6 +14,7 @@ from generation import (
 )
 from analysis.binaural import analyze_binaural
 from analysis.isochronic import analyze_isochronic
+import jobs
 
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 UPLOAD_DIR = os.path.join(BASE_DIR, "static", "uploads")
@@ -41,6 +43,44 @@ def index():
     return render_template("index.html")
 
 
+def _run_file_analysis(job_id, upload_path, filename, report_id):
+    try:
+        jobs.set_stage(job_id, "loading audio")
+        audio = load_audio(upload_path, WORK_DIR)
+        report = build_report(
+            audio, filename, REPORTS_DIR, report_id,
+            progress_cb=lambda stage: jobs.set_stage(job_id, stage),
+        )
+        reports_cache[report_id] = report
+        jobs.set_done(job_id, f"/report/{report_id}")
+    except AudioLoadError as e:
+        jobs.set_error(job_id, f"Could not read this audio file: {e}")
+    except Exception as e:
+        traceback.print_exc()
+        jobs.set_error(job_id, f"Analysis failed: {e}")
+
+
+def _run_url_analysis(job_id, url, report_id):
+    try:
+        jobs.set_stage(job_id, "downloading from YouTube")
+        downloaded_wav = download_audio(url, WORK_DIR)
+        jobs.set_stage(job_id, "loading audio")
+        audio = load_audio(downloaded_wav, WORK_DIR)
+        report = build_report(
+            audio, url, REPORTS_DIR, report_id,
+            progress_cb=lambda stage: jobs.set_stage(job_id, stage),
+        )
+        reports_cache[report_id] = report
+        jobs.set_done(job_id, f"/report/{report_id}")
+    except YouTubeDownloadError as e:
+        jobs.set_error(job_id, f"Could not download that video's audio: {e}")
+    except AudioLoadError as e:
+        jobs.set_error(job_id, f"Could not read the downloaded audio: {e}")
+    except Exception as e:
+        traceback.print_exc()
+        jobs.set_error(job_id, f"Analysis failed: {e}")
+
+
 @app.route("/analyze", methods=["POST"])
 def analyze():
     file = request.files.get("audio_file")
@@ -57,19 +97,11 @@ def analyze():
     upload_path = os.path.join(UPLOAD_DIR, safe_name)
     file.save(upload_path)
 
-    try:
-        audio = load_audio(upload_path, WORK_DIR)
-        report = build_report(audio, file.filename, REPORTS_DIR, report_id)
-    except AudioLoadError as e:
-        flash(f"Could not read this audio file: {e}")
-        return redirect(url_for("index"))
-    except Exception as e:
-        traceback.print_exc()
-        flash(f"Analysis failed: {e}")
-        return redirect(url_for("index"))
-
-    reports_cache[report_id] = report
-    return redirect(url_for("show_report", report_id=report_id))
+    job_id = jobs.create_job("analyze")
+    threading.Thread(
+        target=_run_file_analysis, args=(job_id, upload_path, file.filename, report_id), daemon=True
+    ).start()
+    return redirect(url_for("show_processing", job_id=job_id))
 
 
 @app.route("/analyze_url", methods=["POST"])
@@ -84,26 +116,30 @@ def analyze_url():
         return redirect(url_for("index"))
 
     report_id = uuid.uuid4().hex[:12]
+    job_id = jobs.create_job("analyze_url")
+    threading.Thread(
+        target=_run_url_analysis, args=(job_id, url, report_id), daemon=True
+    ).start()
+    return redirect(url_for("show_processing", job_id=job_id))
 
-    try:
-        downloaded_wav = download_audio(url, WORK_DIR)
-    except YouTubeDownloadError as e:
-        flash(f"Could not download that video's audio: {e}")
-        return redirect(url_for("index"))
 
-    try:
-        audio = load_audio(downloaded_wav, WORK_DIR)
-        report = build_report(audio, url, REPORTS_DIR, report_id)
-    except AudioLoadError as e:
-        flash(f"Could not read the downloaded audio: {e}")
+@app.route("/processing/<job_id>", methods=["GET"])
+def show_processing(job_id):
+    job = jobs.get_job(job_id)
+    if not job:
+        flash("That job could not be found (it may have expired).")
         return redirect(url_for("index"))
-    except Exception as e:
-        traceback.print_exc()
-        flash(f"Analysis failed: {e}")
-        return redirect(url_for("index"))
+    if job["status"] == "done":
+        return redirect(job["redirect_url"])
+    return render_template("processing.html", job_id=job_id, stages=jobs.STAGES)
 
-    reports_cache[report_id] = report
-    return redirect(url_for("show_report", report_id=report_id))
+
+@app.route("/job/<job_id>/status", methods=["GET"])
+def job_status(job_id):
+    job = jobs.get_job(job_id)
+    if not job:
+        return jsonify({"status": "error", "error": "Job not found"}), 404
+    return jsonify(job)
 
 
 @app.route("/generate", methods=["GET"])

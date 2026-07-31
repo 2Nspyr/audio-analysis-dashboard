@@ -10,21 +10,34 @@ from analysis.isochronic import analyze_isochronic
 from analysis.harmonic import analyze_harmonic_balance
 
 
-def build_report(audio, filename, reports_dir, report_id):
+def build_report(audio, filename, reports_dir, report_id, progress_cb=None):
+    """progress_cb, if given, is called with a short stage name before each
+    analysis step starts - lets the caller surface progress to the user."""
+    def stage(name):
+        if progress_cb:
+            progress_cb(name)
+
     sr = audio["sr"]
     mono = audio["mono"]
     data = audio["data"]
     channels = audio["channels"]
     duration_sec = audio["duration_sec"]
 
+    stage("tuning reference")
     tuning = analyze_tuning(mono, sr, duration_sec)
 
+    stage("spectrogram")
     spec_filename = f"{report_id}_spectrogram.png"
     spec_path = os.path.join(reports_dir, spec_filename)
     generate_spectrogram_image(mono, sr, spec_path)
 
+    stage("binaural beat")
     binaural = analyze_binaural(data, sr, channels)
+
+    stage("isochronic pulse")
     isochronic = analyze_isochronic(mono, sr)
+
+    stage("harmonic balance")
     harmonic = analyze_harmonic_balance(mono, sr)
 
     summary = _build_summary(tuning, binaural, isochronic, harmonic)
