@@ -9,15 +9,24 @@
     .nav { margin-bottom: 20px; }
     .source-note { color: #666; font-size: 13px; line-height: 1.5; background: #f7f7f7; border: 1px solid #eee;
                    border-radius: 8px; padding: 10px 14px; margin-bottom: 20px; }
-    .controls { display: flex; gap: 10px; margin-bottom: 6px; position: sticky; top: 0; background: white;
+    .controls { display: flex; gap: 10px; margin-bottom: 10px; position: sticky; top: 0; background: white;
                 padding: 10px 0; z-index: 5; }
     #search { flex: 1; padding: 10px 12px; font-size: 15px; border: 1px solid #ccc; border-radius: 6px; }
     #categoryFilter { padding: 10px 12px; font-size: 14px; border: 1px solid #ccc; border-radius: 6px; }
-    #resultCount { color: #888; font-size: 13px; margin-bottom: 14px; }
+    #resultCount { color: #888; font-size: 13px; margin-bottom: 8px; }
+    .chips { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 22px; }
+    .chip { font-size: 12px; color: #4a90d9; border: 1px solid #cfe0f3; background: #f3f8fd;
+            border-radius: 14px; padding: 4px 12px; text-decoration: none; }
+    .chip:hover { background: #e6f1fb; }
+    .category-section { margin-bottom: 30px; }
+    .category-heading { font-size: 17px; font-weight: 700; margin: 0 0 4px; padding-top: 6px;
+                         scroll-margin-top: 70px; }
+    .category-count { color: #999; font-weight: 400; font-size: 13px; }
     .entry { border: 1px solid #ddd; border-radius: 8px; padding: 14px 18px; margin-bottom: 10px; }
     .entry-top { display: flex; justify-content: space-between; align-items: baseline; cursor: pointer; }
     .entry-name { font-weight: 600; font-size: 15px; }
-    .entry-category { color: #888; font-size: 12px; }
+    .entry-system { display: inline-block; color: #888; font-size: 11px; border: 1px solid #ddd;
+                    border-radius: 8px; padding: 0 6px; margin-left: 6px; vertical-align: middle; }
     .entry-freqs { color: #666; font-size: 13px; margin-top: 4px; font-family: monospace; }
     .entry-form { display: none; margin-top: 14px; padding-top: 14px; border-top: 1px solid #eee; }
     .entry-form.open { display: block; }
@@ -26,7 +35,7 @@
     .entry-form select { padding: 6px; }
     .entry-form input[type=file] { font-size: 13px; }
     .entry-form button { margin-top: 12px; padding: 8px 18px; font-size: 14px; cursor: pointer; }
-    .toggle-hint { color: #4a90d9; font-size: 12px; }
+    .toggle-hint { color: #4a90d9; font-size: 12px; white-space: nowrap; }
     .no-results { color: #888; padding: 30px 0; text-align: center; }
   </style>
 </head>
@@ -50,35 +59,48 @@
   </div>
   <div id="resultCount"></div>
 
+  <div class="chips">
+    {% for category, group in grouped_entries %}
+      <a class="chip" href="#cat-{{ loop.index }}">{{ category }}</a>
+    {% endfor %}
+  </div>
+
   <div id="entryList">
-    {% for e in entries %}
-    <div class="entry" data-name="{{ e.name|lower }}" data-category="{{ e.category }}">
-      <div class="entry-top" onclick="toggleForm('{{ e.slug }}')">
-        <div>
-          <div class="entry-name">{{ e.name }}</div>
-          <div class="entry-category">{{ e.category }}</div>
-          <div class="entry-freqs">{{ e.frequencies_display }} Hz</div>
+    {% for category, group in grouped_entries %}
+    <div class="category-section" data-category="{{ category }}">
+      <h2 class="category-heading" id="cat-{{ loop.index }}">
+        {{ category }} <span class="category-count">({{ group|length }})</span>
+      </h2>
+
+      {% for e in group %}
+      <div class="entry" data-name="{{ e.name|lower }}" data-category="{{ e.category }}">
+        <div class="entry-top" onclick="toggleForm('{{ e.slug }}')">
+          <div>
+            <div class="entry-name">{{ e.name }}<span class="entry-system">{{ e.system }}</span></div>
+            <div class="entry-freqs">{{ e.frequencies_display }} Hz</div>
+          </div>
+          <div class="toggle-hint" id="hint-{{ e.slug }}">Generate &darr;</div>
         </div>
-        <div class="toggle-hint" id="hint-{{ e.slug }}">Generate &darr;</div>
+
+        <form class="entry-form" id="form-{{ e.slug }}" action="/library/{{ e.slug }}/generate" method="post" enctype="multipart/form-data">
+          <label>Duration (seconds)</label>
+          <input type="number" name="duration" value="300" step="10" min="10" max="3600">
+
+          <label>Render mode</label>
+          <select name="render_mode">
+            <option value="auto">Auto (tone above 20Hz, pulse below)</option>
+            <option value="isochronic">Force isochronic pulse for every step</option>
+          </select>
+
+          <label>Optional: layer under an imported file</label>
+          <input type="file" name="layer_file" accept=".wav,.mp3,.m4a,.aac,.flac,.ogg">
+          <label>Bed volume (0 = imported file only, 1 = generated sequence only)</label>
+          <input type="number" name="mix_ratio" value="0.4" step="0.05" min="0" max="1">
+
+          <div><button type="submit">Generate &amp; download</button></div>
+        </form>
       </div>
-
-      <form class="entry-form" id="form-{{ e.slug }}" action="/library/{{ e.slug }}/generate" method="post" enctype="multipart/form-data">
-        <label>Duration (seconds)</label>
-        <input type="number" name="duration" value="300" step="10" min="10" max="3600">
-
-        <label>Render mode</label>
-        <select name="render_mode">
-          <option value="auto">Auto (tone above 20Hz, pulse below)</option>
-          <option value="isochronic">Force isochronic pulse for every step</option>
-        </select>
-
-        <label>Optional: layer under an imported file</label>
-        <input type="file" name="layer_file" accept=".wav,.mp3,.m4a,.aac,.flac,.ogg">
-        <label>Bed volume (0 = imported file only, 1 = generated sequence only)</label>
-        <input type="number" name="mix_ratio" value="0.4" step="0.05" min="0" max="1">
-
-        <div><button type="submit">Generate &amp; download</button></div>
-      </form>
+      {% endfor %}
     </div>
     {% endfor %}
   </div>
@@ -95,7 +117,7 @@
 
     const searchBox = document.getElementById('search');
     const categorySelect = document.getElementById('categoryFilter');
-    const entries = Array.from(document.querySelectorAll('.entry'));
+    const sections = Array.from(document.querySelectorAll('.category-section'));
     const resultCount = document.getElementById('resultCount');
     const noResults = document.getElementById('noResults');
 
@@ -103,13 +125,23 @@
       const q = searchBox.value.trim().toLowerCase();
       const cat = categorySelect.value;
       let visible = 0;
-      entries.forEach(el => {
-        const nameMatch = !q || el.dataset.name.includes(q);
-        const catMatch = !cat || el.dataset.category === cat;
-        const show = nameMatch && catMatch;
-        el.style.display = show ? '' : 'none';
-        if (show) visible++;
+
+      sections.forEach(section => {
+        const sectionCategory = section.dataset.category;
+        if (cat && sectionCategory !== cat) {
+          section.style.display = 'none';
+          return;
+        }
+        let sectionVisible = 0;
+        section.querySelectorAll('.entry').forEach(el => {
+          const show = !q || el.dataset.name.includes(q);
+          el.style.display = show ? '' : 'none';
+          if (show) sectionVisible++;
+        });
+        section.style.display = sectionVisible === 0 ? 'none' : '';
+        visible += sectionVisible;
       });
+
       resultCount.textContent = visible + (visible === 1 ? ' preset' : ' presets');
       noResults.style.display = visible === 0 ? 'block' : 'none';
     }

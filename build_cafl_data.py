@@ -1,15 +1,30 @@
-"""One-time build script: turns the raw CAFL (Consolidated Annotated
-Frequency List) table into data/cafl_frequencies.json for the app to load.
+"""One-time build script: turns the raw frequency tables below into
+data/frequency_library.json for the app to load. Covers three separate
+frequency systems, each with distinct provenance - kept clearly labeled
+(the "system" field on each entry) rather than blended together, since
+they come from different traditions and shouldn't be presented as one
+undifferentiated list:
 
-Source: the publicly available, decades-old practitioner-compiled CAFL,
-gathered from Jim Bare's updated list, Dan Tracy's list, and Rife's lab
-notes (per royalrife.com/freq.html, itself drawing on the same public CAFL
-that essentially every Rife-frequency tool - including the Z-App the user
-referenced - is built on). This is NOT Rife's original 1930s RF lab
-measurements (those are ultra-high radio frequencies, 139kHz-1.6MHz,
-physically impossible to reproduce as an audio file) - it's the real-world,
-audio-range standard the wellness-frequency community actually uses and
-that this tool can accurately generate.
+1. CAFL (Consolidated Annotated Frequency List) - the publicly available,
+   decades-old practitioner-compiled reference (Jim Bare, Dan Tracy, and
+   others), gathered per royalrife.com/freq.html, itself drawing on the
+   same public CAFL that essentially every Rife-frequency tool - including
+   the Z-App the user referenced - is built on. This is NOT Rife's original
+   1930s RF lab measurements (those are ultra-high radio frequencies,
+   139kHz-1.6MHz, physically impossible to reproduce as an audio file) -
+   it's the real-world, audio-range standard the wellness-frequency
+   community actually uses.
+
+2. Solfeggio frequencies - the 9-tone scale (174-963 Hz) widely used in
+   sound healing for emotional/spiritual states, cross-checked against two
+   independent sources (aurahealth.io, miraclefrequencies.org) for the
+   standard meaning of each tone.
+
+3. Chakra frequencies - the 7 chakras mapped to Solfeggio tones, verified
+   consistent across two independent sources (eyemindspirit.com,
+   miraclefrequencies.org). Both sources note an alternative
+   planetary-orbital-tone chakra system also circulates; this uses the
+   Solfeggio mapping, the one most widely used in sound healing practice.
 
 Run once: python3 build_cafl_data.py
 """
@@ -155,6 +170,33 @@ RAW += [
     ("General Relaxation", "Mental & Emotional", "10, 304, 727, 787"),
 ]
 
+# Solfeggio frequencies: name carries the traditional meaning directly (the
+# thing people actually search for - "liberation from fear", not just a
+# number), category groups them together for browsing.
+RAW_SOLFEGGIO = [
+    ("174 Hz - Pain Relief & Security", "Emotional & Spiritual (Solfeggio)", "174"),
+    ("285 Hz - Quantum Cognition & Healing", "Emotional & Spiritual (Solfeggio)", "285"),
+    ("396 Hz - Liberating Guilt & Fear", "Emotional & Spiritual (Solfeggio)", "396"),
+    ("417 Hz - Facilitating Change", "Emotional & Spiritual (Solfeggio)", "417"),
+    ("528 Hz - Transformation & Miracles (Love Frequency)", "Emotional & Spiritual (Solfeggio)", "528"),
+    ("639 Hz - Connecting & Relationships", "Emotional & Spiritual (Solfeggio)", "639"),
+    ("741 Hz - Awakening Intuition & Expression", "Emotional & Spiritual (Solfeggio)", "741"),
+    ("852 Hz - Returning to Spiritual Order", "Emotional & Spiritual (Solfeggio)", "852"),
+    ("963 Hz - Divine Consciousness", "Emotional & Spiritual (Solfeggio)", "963"),
+]
+
+# Chakra frequencies: the 7 chakras mapped to Solfeggio tones (the mapping
+# verified consistent across two independent sources - see module docstring).
+RAW_CHAKRA = [
+    ("Root Chakra - Safety & Grounding", "Chakras", "396"),
+    ("Sacral Chakra - Creativity & Flow", "Chakras", "417"),
+    ("Solar Plexus Chakra - Confidence & Will", "Chakras", "528"),
+    ("Heart Chakra - Love & Connection", "Chakras", "639"),
+    ("Throat Chakra - Truth & Expression", "Chakras", "741"),
+    ("Third Eye Chakra - Intuition & Insight", "Chakras", "852"),
+    ("Crown Chakra - Connection to Source", "Chakras", "963"),
+]
+
 
 def parse_frequencies(raw: str):
     """Returns (list_of_playable_hz, display_string). Ranges ('484-504') are
@@ -187,10 +229,8 @@ def slugify(name: str) -> str:
     return s
 
 
-def main():
-    entries = []
-    seen_slugs = set()
-    for name, category, raw in RAW:
+def build_entries(rows, system, seen_slugs, entries):
+    for name, category, raw in rows:
         values, display = parse_frequencies(raw)
         slug = slugify(name)
         base_slug = slug
@@ -203,31 +243,53 @@ def main():
             "slug": slug,
             "name": name,
             "category": category,
+            "system": system,
             "frequencies_hz": values,
             "frequencies_display": display,
         })
 
+
+def main():
+    entries = []
+    seen_slugs = set()
+    build_entries(RAW, "CAFL", seen_slugs, entries)
+    build_entries(RAW_SOLFEGGIO, "Solfeggio", seen_slugs, entries)
+    build_entries(RAW_CHAKRA, "Chakra", seen_slugs, entries)
+
     entries.sort(key=lambda e: (e["category"], e["name"]))
 
     out = {
-        "source": "CAFL (Consolidated Annotated Frequency List) - a publicly "
-                   "available, decades-old practitioner-compiled reference "
-                   "(Jim Bare, Dan Tracy, and others), NOT Dr. Rife's original "
-                   "1930s radio-frequency lab measurements. This is the "
-                   "audio-range standard used by virtually every practical "
-                   "Rife-frequency tool.",
+        "source": "Three frequency systems, each labeled with its own "
+                   "provenance: CAFL (Consolidated Annotated Frequency "
+                   "List) - a publicly available, decades-old "
+                   "practitioner-compiled reference (Jim Bare, Dan Tracy, "
+                   "and others), NOT Dr. Rife's original 1930s "
+                   "radio-frequency lab measurements, but the audio-range "
+                   "standard used by virtually every practical "
+                   "Rife-frequency tool. Solfeggio - the traditional 9-tone "
+                   "scale used in sound healing for emotional/spiritual "
+                   "states. Chakra - the 7 chakras mapped to Solfeggio "
+                   "tones, cross-checked across independent sources.",
         "disclaimer": "For wellness/experimental use. These frequency "
                        "associations come from historical practitioner "
-                       "compilations, not clinical trials - nothing here is "
+                       "compilations and traditional sound-healing "
+                       "references, not clinical trials - nothing here is "
                        "a medical claim or a substitute for medical care.",
         "entries": entries,
     }
 
-    with open("data/cafl_frequencies.json", "w") as f:
+    with open("data/frequency_library.json", "w") as f:
         json.dump(out, f, indent=2)
+
+    by_system = {}
+    for e in entries:
+        by_system.setdefault(e["system"], 0)
+        by_system[e["system"]] += 1
 
     print(f"Wrote {len(entries)} entries across "
           f"{len(set(e['category'] for e in entries))} categories.")
+    for sys_name, count in sorted(by_system.items()):
+        print(f"  {sys_name}: {count}")
 
 
 if __name__ == "__main__":

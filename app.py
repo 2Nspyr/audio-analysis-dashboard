@@ -46,7 +46,7 @@ def index():
     # /analyze instead of being the landing page.
     return render_template(
         "library.html",
-        entries=frequency_library.get_all_entries(),
+        grouped_entries=frequency_library.get_grouped_entries(),
         categories=frequency_library.get_categories(),
         meta=frequency_library.get_meta(),
     )
@@ -257,7 +257,7 @@ def generate():
 def library_browse():
     return render_template(
         "library.html",
-        entries=frequency_library.get_all_entries(),
+        grouped_entries=frequency_library.get_grouped_entries(),
         categories=frequency_library.get_categories(),
         meta=frequency_library.get_meta(),
     )
