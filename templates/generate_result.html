@@ -20,7 +20,8 @@
 
   <div class="panel">
     <h2>{{ label }}</h2>
-    <a class="download" href="{{ download_url }}" download>Download WAV</a>
+    <audio controls preload="metadata" style="width: 100%; margin-top: 10px;" src="{{ download_url }}"></audio>
+    <div><a class="download" href="{{ download_url }}" download>Download WAV</a></div>
   </div>
 
   {% if verification %}
