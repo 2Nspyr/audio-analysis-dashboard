@@ -35,11 +35,55 @@
     .nav a:hover { color: var(--accent); }
     h1 {
       font-size: 26px; margin: 0 0 4px; font-weight: 700; letter-spacing: -0.01em;
-      background: linear-gradient(120deg, #f2f4f8, var(--accent));
+      background: linear-gradient(120deg, #f2f4f8, var(--accent), #f2f4f8);
+      background-size: 220% auto;
       -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent;
-      display: inline-block;
+      display: inline-flex; align-items: center; gap: 12px;
+      animation: titleShimmer 6s ease-in-out infinite;
     }
-    .tagline { color: var(--text-faint); font-size: 13px; margin: 0 0 22px; letter-spacing: 0.02em; }
+    @keyframes titleShimmer {
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
+    }
+    .tagline { color: var(--text-faint); font-size: 13px; margin: 0 0 18px; letter-spacing: 0.02em; }
+
+    /* Decorative mini equalizer — a small "live" indicator, not tied to
+       any real audio, just a bit of movement so the page feels alive. */
+    .eq-mini {
+      display: inline-flex; align-items: flex-end; gap: 2px; height: 18px; width: 18px;
+      flex-shrink: 0; vertical-align: middle;
+    }
+    .eq-mini span {
+      width: 3px; background: linear-gradient(180deg, var(--accent), #2b8a82);
+      border-radius: 1px; height: 100%; transform-origin: bottom;
+      animation: eqPulse 1s ease-in-out infinite;
+    }
+    .eq-mini span:nth-child(1) { animation-delay: -0.6s; }
+    .eq-mini span:nth-child(2) { animation-delay: -0.2s; }
+    .eq-mini span:nth-child(3) { animation-delay: -0.8s; }
+    .eq-mini span:nth-child(4) { animation-delay: -0.4s; }
+    @keyframes eqPulse {
+      0%, 100% { transform: scaleY(0.25); opacity: 0.7; }
+      50% { transform: scaleY(1); opacity: 1; }
+    }
+    .eq-mini.eq-dim span { background: linear-gradient(180deg, var(--text-dim), #2c3141); opacity: 0.6; }
+
+    /* Ambient hero waveform — pure CSS/JS decoration, zero server cost. */
+    .hero-wave {
+      display: flex; align-items: center; gap: 3px; height: 46px;
+      margin: 0 0 22px; opacity: 0.6;
+    }
+    .hero-wave .wbar {
+      flex: 1; min-width: 2px; max-width: 6px; height: 100%;
+      background: linear-gradient(180deg, var(--accent), rgba(79, 209, 197, 0.05));
+      border-radius: 2px; transform-origin: center;
+      animation-name: waveMove; animation-timing-function: ease-in-out; animation-iteration-count: infinite;
+    }
+    @keyframes waveMove {
+      0%, 100% { transform: scaleY(0.15); }
+      50% { transform: scaleY(1); }
+    }
     .source-note {
       color: var(--text-dim); font-size: 12.5px; line-height: 1.6;
       background: var(--panel); border: 1px solid var(--border-soft);
@@ -124,8 +168,10 @@
 </head>
 <body>
   <div class="nav"><a href="/generate">Freeform generator</a> &middot; <a href="/analyze">Analyze audio</a></div>
-  <h1>Frequency Library</h1>
+  <h1><span class="eq-mini"><span></span><span></span><span></span><span></span></span>Frequency Library</h1>
   <p class="tagline">Search, browse, and generate downloadable tone sequences</p>
+
+  <div class="hero-wave" id="heroWave"></div>
 
   <div class="source-note">
     <strong>Source:</strong> {{ meta.source }}<br>
@@ -153,7 +199,10 @@
     {% for category, group in grouped_entries %}
     <div class="category-section" data-category="{{ category }}">
       <h2 class="category-heading" id="cat-{{ loop.index }}" onclick="toggleCategory(this.parentElement)">
-        <span>{{ category }} <span class="category-count">({{ group|length }})</span></span>
+        <span style="display:flex; align-items:center; gap:10px;">
+          <span class="eq-mini eq-dim"><span></span><span></span><span></span><span></span></span>
+          {{ category }} <span class="category-count">({{ group|length }})</span>
+        </span>
         <span class="category-caret">&#9656;</span>
       </h2>
 
@@ -195,6 +244,23 @@
   <div class="no-results" id="noResults" style="display:none;">No matches. Try a different search term.</div>
 
   <script>
+    // Populate the hero waveform with randomized bars so it reads as an
+    // ambient audio signal rather than a repeating pattern. Pure CSS
+    // animation from here on — no server cost, no network activity.
+    (function buildHeroWave() {
+      const wave = document.getElementById('heroWave');
+      const barCount = 64;
+      for (let i = 0; i < barCount; i++) {
+        const bar = document.createElement('div');
+        bar.className = 'wbar';
+        const duration = (0.8 + Math.random() * 1.2).toFixed(2);
+        const delay = (Math.random() * -2).toFixed(2);
+        bar.style.animationDuration = duration + 's';
+        bar.style.animationDelay = delay + 's';
+        wave.appendChild(bar);
+      }
+    })();
+
     function toggleForm(slug) {
       const form = document.getElementById('form-' + slug);
       const hint = document.getElementById('hint-' + slug);
