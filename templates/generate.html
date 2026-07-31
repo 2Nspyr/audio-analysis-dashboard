@@ -1,0 +1,83 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>Generate Frequency File</title>
+  <style>
+    body { font-family: -apple-system, Arial, sans-serif; max-width: 640px; margin: 60px auto; padding: 0 20px; }
+    h1 { font-size: 22px; }
+    fieldset { border: 1px solid #ddd; border-radius: 8px; padding: 16px 20px; margin-bottom: 16px; }
+    legend { font-weight: 600; padding: 0 6px; }
+    label { display: block; margin: 10px 0 4px; font-size: 14px; }
+    input[type=number], input[type=file] { padding: 8px; width: 100%; box-sizing: border-box; }
+    .mode-block { display: none; }
+    .mode-block.active { display: block; }
+    button { margin-top: 20px; padding: 10px 20px; font-size: 15px; cursor: pointer; }
+    .flash { background: #fee; border: 1px solid #f99; padding: 10px; border-radius: 6px; margin-bottom: 16px; }
+    .nav { margin-bottom: 20px; }
+  </style>
+</head>
+<body>
+  <div class="nav"><a href="/">&larr; Analyze audio</a></div>
+  <h1>Generate a Frequency File</h1>
+
+  {% with messages = get_flashed_messages() %}
+    {% if messages %}
+      {% for m in messages %}<div class="flash">{{ m }}</div>{% endfor %}
+    {% endif %}
+  {% endwith %}
+
+  <form action="/generate" method="post" enctype="multipart/form-data" id="genForm">
+    <fieldset>
+      <legend>Mode</legend>
+      <label><input type="radio" name="mode" value="pure" checked onchange="showMode('pure')"> Pure tone</label>
+      <label><input type="radio" name="mode" value="binaural" onchange="showMode('binaural')"> Binaural beat</label>
+      <label><input type="radio" name="mode" value="isochronic" onchange="showMode('isochronic')"> Isochronic pulse</label>
+    </fieldset>
+
+    <fieldset>
+      <legend>Parameters</legend>
+
+      <div id="mode-pure" class="mode-block active">
+        <label>Frequency (Hz)</label>
+        <input type="number" name="freq" value="528" step="0.1" min="1" max="20000">
+      </div>
+
+      <div id="mode-binaural" class="mode-block">
+        <label>Carrier frequency (Hz)</label>
+        <input type="number" name="carrier" value="200" step="0.1" min="20" max="2000">
+        <label>Beat rate (Hz)</label>
+        <input type="number" name="beat" value="6" step="0.1" min="0.5" max="40">
+        <p style="color:#666; font-size: 13px;">Requires headphones to perceive the beat — each ear needs a separate tone.</p>
+      </div>
+
+      <div id="mode-isochronic" class="mode-block">
+        <label>Tone frequency (Hz)</label>
+        <input type="number" name="tone_freq" value="300" step="0.1" min="20" max="10000">
+        <label>Pulse rate (Hz)</label>
+        <input type="number" name="pulse_rate" value="6" step="0.1" min="0.5" max="40">
+      </div>
+
+      <label>Duration (seconds)</label>
+      <input type="number" name="duration" value="30" step="1" min="1" max="3600">
+    </fieldset>
+
+    <fieldset>
+      <legend>Optional: layer under an imported file</legend>
+      <label>Import a file (e.g. a voice recording) to mix the generated tone underneath</label>
+      <input type="file" name="layer_file" accept=".wav,.mp3,.m4a,.aac,.flac,.ogg">
+      <label>Bed volume (0 = imported file only, 1 = generated tone only)</label>
+      <input type="number" name="mix_ratio" value="0.4" step="0.05" min="0" max="1">
+    </fieldset>
+
+    <button type="submit">Generate</button>
+  </form>
+
+  <script>
+    function showMode(mode) {
+      document.querySelectorAll('.mode-block').forEach(el => el.classList.remove('active'));
+      document.getElementById('mode-' + mode).classList.add('active');
+    }
+  </script>
+</body>
+</html>

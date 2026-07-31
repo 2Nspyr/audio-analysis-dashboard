@@ -1,0 +1,47 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>Generated File</title>
+  <style>
+    body { font-family: -apple-system, Arial, sans-serif; max-width: 640px; margin: 60px auto; padding: 0 20px; }
+    .panel { border: 1px solid #ddd; border-radius: 8px; padding: 16px 20px; margin-bottom: 18px; }
+    .verify { display: flex; justify-content: space-between; padding: 10px 0; border-top: 1px solid #eee; }
+    .badge { display: inline-block; padding: 2px 8px; border-radius: 10px; font-size: 12px; }
+    .badge.yes { background: #dcf5dc; color: #1a7a1a; }
+    .badge.no { background: #f7d9d9; color: #a33; }
+    a.download { display: inline-block; margin-top: 10px; padding: 10px 20px; background: #4a90d9; color: white;
+                 text-decoration: none; border-radius: 6px; }
+    .nav { margin-bottom: 20px; }
+  </style>
+</head>
+<body>
+  <div class="nav"><a href="/generate">&larr; Generate another</a> &middot; <a href="/">Analyze audio</a></div>
+
+  <div class="panel">
+    <h2>{{ label }}</h2>
+    <a class="download" href="{{ download_url }}" download>Download WAV</a>
+  </div>
+
+  {% if verification %}
+  <div class="panel">
+    <h2>Sanity check</h2>
+    {% if verification.error %}
+      <p>Could not auto-verify: {{ verification.error }}</p>
+    {% else %}
+      <div class="verify">
+        <span>Generated: <strong>{{ verification.expected }}</strong> {{ verification.kind }}</span>
+      </div>
+      <div class="verify">
+        <span>Verified via analysis: <strong>{{ verification.detected_value }}</strong></span>
+        {% if verification.detected %}
+          <span class="badge yes">Match</span>
+        {% else %}
+          <span class="badge no">No match</span>
+        {% endif %}
+      </div>
+    {% endif %}
+  </div>
+  {% endif %}
+</body>
+</html>

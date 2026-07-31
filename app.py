@@ -7,13 +7,20 @@ from flask import Flask, request, render_template, redirect, url_for, flash
 from audio_io import load_audio, AudioLoadError
 from report import build_report
 from youtube_dl import is_youtube_url, download_audio, YouTubeDownloadError
+from generation import (
+    generate_pure_tone, generate_binaural, generate_isochronic,
+    layer_with_import, write_wav,
+)
+from analysis.binaural import analyze_binaural
+from analysis.isochronic import analyze_isochronic
 
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 UPLOAD_DIR = os.path.join(BASE_DIR, "static", "uploads")
 REPORTS_DIR = os.path.join(BASE_DIR, "static", "reports")
 WORK_DIR = os.path.join(BASE_DIR, "static", "work")
+GENERATED_DIR = os.path.join(BASE_DIR, "static", "generated")
 
-for d in (UPLOAD_DIR, REPORTS_DIR, WORK_DIR):
+for d in (UPLOAD_DIR, REPORTS_DIR, WORK_DIR, GENERATED_DIR):
     os.makedirs(d, exist_ok=True)
 
 ALLOWED_EXT = {"wav", "mp3", "m4a", "aac", "flac", "ogg"}
@@ -97,6 +104,103 @@ def analyze_url():
 
     reports_cache[report_id] = report
     return redirect(url_for("show_report", report_id=report_id))
+
+
+@app.route("/generate", methods=["GET"])
+def generate_form():
+    return render_template("generate.html")
+
+
+@app.route("/generate", methods=["POST"])
+def generate():
+    mode = request.form.get("mode")
+    try:
+        duration = float(request.form.get("duration", 30))
+        duration = max(1, min(duration, 3600))
+    except (TypeError, ValueError):
+        flash("Invalid duration.")
+        return redirect(url_for("generate_form"))
+
+    try:
+        if mode == "pure":
+            freq = float(request.form.get("freq", 528))
+            signal, sr = generate_pure_tone(freq, duration)
+            gen_label = f"Pure tone: {freq:.1f} Hz"
+            verify = None
+
+        elif mode == "binaural":
+            carrier = float(request.form.get("carrier", 200))
+            beat = float(request.form.get("beat", 6))
+            signal, sr = generate_binaural(carrier, beat, duration)
+            gen_label = f"Binaural beat: {carrier:.1f} Hz carrier, {beat:.1f} Hz beat"
+            verify = ("binaural", beat)
+
+        elif mode == "isochronic":
+            tone_freq = float(request.form.get("tone_freq", 300))
+            pulse_rate = float(request.form.get("pulse_rate", 6))
+            signal, sr = generate_isochronic(tone_freq, pulse_rate, duration)
+            gen_label = f"Isochronic pulse: {tone_freq:.1f} Hz tone, {pulse_rate:.1f} Hz pulse"
+            verify = ("isochronic", pulse_rate)
+
+        else:
+            flash("Choose a generation mode.")
+            return redirect(url_for("generate_form"))
+    except (TypeError, ValueError):
+        flash("Invalid frequency/duration values.")
+        return redirect(url_for("generate_form"))
+
+    # Optional layering under an imported file (e.g. a voice recording)
+    layer_file = request.files.get("layer_file")
+    if layer_file and layer_file.filename:
+        try:
+            mix_ratio = float(request.form.get("mix_ratio", 0.4))
+            mix_ratio = max(0.0, min(mix_ratio, 1.0))
+            gen_id = uuid.uuid4().hex[:8]
+            layer_upload_path = os.path.join(UPLOAD_DIR, f"{gen_id}_{layer_file.filename}")
+            layer_file.save(layer_upload_path)
+            imported_audio = load_audio(layer_upload_path, WORK_DIR)
+            signal = layer_with_import(signal, sr, imported_audio["data"], imported_audio["sr"], mix_ratio)
+            gen_label += f" (layered under '{layer_file.filename}' at {int(mix_ratio*100)}% bed volume)"
+        except Exception as e:
+            traceback.print_exc()
+            flash(f"Layering failed, generated the bed alone instead: {e}")
+
+    gen_id = uuid.uuid4().hex[:12]
+    out_filename = f"{gen_id}.wav"
+    out_path = os.path.join(GENERATED_DIR, out_filename)
+    write_wav(signal, sr, out_path)
+
+    verification = None
+    if verify:
+        kind, expected_value = verify
+        try:
+            audio = load_audio(out_path, WORK_DIR)
+            if kind == "binaural":
+                result = analyze_binaural(audio["data"], audio["sr"], audio["channels"])
+                verification = {
+                    "kind": "binaural",
+                    "expected": f"{expected_value:.1f} Hz",
+                    "detected": result.get("detected"),
+                    "detected_value": f"{result.get('beat_hz')} Hz ({result.get('band')})" if result.get("detected") else result.get("message"),
+                }
+            elif kind == "isochronic":
+                result = analyze_isochronic(audio["mono"], audio["sr"])
+                verification = {
+                    "kind": "isochronic",
+                    "expected": f"{expected_value:.1f} Hz",
+                    "detected": result.get("detected"),
+                    "detected_value": f"{result.get('rate_hz')} Hz" if result.get("detected") else result.get("message"),
+                }
+        except Exception as e:
+            traceback.print_exc()
+            verification = {"kind": kind, "error": str(e)}
+
+    return render_template(
+        "generate_result.html",
+        label=gen_label,
+        download_url=url_for("static", filename=f"generated/{out_filename}"),
+        verification=verification,
+    )
 
 
 @app.route("/report/<report_id>", methods=["GET"])

@@ -71,10 +71,25 @@ def track_pitch(mono: np.ndarray, sr: int):
                 continue
             if best_strength[i] < VOICING_THRESHOLD:
                 continue
-            lag = best_lag[i]
+            lag = int(best_lag[i])
             if lag <= 0:
                 continue
-            freq = sr / lag
+
+            # Integer-sample lag alone quantizes frequency in coarse steps
+            # (e.g. ~6 Hz apart near 500 Hz at 44.1 kHz) - too coarse for a
+            # 15-cent tuning tolerance. Parabolic interpolation around the
+            # ACF peak recovers sub-sample precision cheaply and standard
+            # in autocorrelation pitch trackers.
+            refined_lag = float(lag)
+            if 0 < lag < FRAME_LEN - 1:
+                y0, y1, y2 = acf_norm[i, lag - 1], acf_norm[i, lag], acf_norm[i, lag + 1]
+                denom = (y0 - 2 * y1 + y2)
+                if denom != 0:
+                    offset = 0.5 * (y0 - y2) / denom
+                    if -1.0 < offset < 1.0:
+                        refined_lag = lag + offset
+
+            freq = sr / refined_lag
             t = (start + i) * HOP / sr
             results.append({
                 "time_sec": t,
@@ -117,6 +132,7 @@ def analyze_tuning(mono: np.ndarray, sr: int, duration_sec: float):
     freqs = np.array([p["freq_hz"] for p in pitches])
 
     scores = {}
+    mean_abs_cents = {}
     for ref in REFERENCE_PITCHES:
         cents_devs = []
         for f in freqs:
@@ -125,8 +141,13 @@ def analyze_tuning(mono: np.ndarray, sr: int, duration_sec: float):
         cents_devs = np.array(cents_devs)
         in_tolerance = np.abs(cents_devs) <= CENTS_TOLERANCE
         scores[ref] = float(np.mean(in_tolerance) * 100.0)
+        mean_abs_cents[ref] = float(np.mean(np.abs(cents_devs)))
 
-    best_reference = max(scores, key=scores.get)
+    # Pick the reference with the highest in-tolerance %; break ties (common
+    # for a single sustained pitch, which can sit within tolerance of several
+    # adjacent reference grids at once) by which grid it sits CLOSEST to on
+    # average, not just whichever happened to be checked first.
+    best_reference = max(REFERENCE_PITCHES, key=lambda r: (scores[r], -mean_abs_cents[r]))
     confidence = scores[best_reference]
 
     # Drift check: split track into thirds by time, compare mean cents deviation
