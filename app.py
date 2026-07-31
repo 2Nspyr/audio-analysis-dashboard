@@ -41,6 +41,19 @@ def allowed_file(filename):
 
 @app.route("/", methods=["GET"])
 def index():
+    # The frequency library (search + generate) is the primary experience now;
+    # file/YouTube analysis still works exactly as before, just moved to
+    # /analyze instead of being the landing page.
+    return render_template(
+        "library.html",
+        entries=frequency_library.get_all_entries(),
+        categories=frequency_library.get_categories(),
+        meta=frequency_library.get_meta(),
+    )
+
+
+@app.route("/analyze", methods=["GET"])
+def analyze_form():
     return render_template("index.html")
 
 

@@ -45,7 +45,7 @@
             document.getElementById('working').style.display = 'none';
             const box = document.getElementById('errorBox');
             box.style.display = 'block';
-            box.innerHTML = (data.error || 'Something went wrong.') + '<br><a href="/">&larr; Try again</a>';
+            box.innerHTML = (data.error || 'Something went wrong.') + '<br><a href="/analyze">&larr; Try again</a>';
             return;
           }
           document.getElementById('stageText').textContent = (data.stage || 'working') + '…';
