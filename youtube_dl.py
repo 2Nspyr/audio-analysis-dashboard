@@ -17,19 +17,23 @@ YOUTUBE_URL_RE = re.compile(
     r"^https?://(www\.)?(youtube\.com/(watch\?v=|shorts/)|youtu\.be/)[\w-]+", re.IGNORECASE
 )
 
-# Player clients to try, in order, when the default fails with a bot-check
-# error. Each is a full retry attempt, not a fallback within one request.
-PLAYER_CLIENT_ATTEMPTS = [
-    ["android"],
-    ["ios"],
-    ["web", "tv"],
-]
-
 # Optional: path to a Netscape-format cookies.txt file (exported from a
 # logged-in browser session) for when player-client spoofing alone isn't
 # enough. Not required for normal operation - only set this if downloads
-# keep failing with a bot-check error even after the client fallback above.
+# keep failing with a bot-check error even after the client fallback below.
 COOKIES_FILE = os.environ.get("YOUTUBE_COOKIES_FILE")
+
+# Player clients to try, in order. "web" has the fullest format list
+# (including separate audio-only streams) but gets bot-check-blocked without
+# cookies; android/ios dodge the bot-check but often expose a narrower,
+# sometimes audio-less format list. With cookies configured, try web first
+# since it's both authenticated and has the best format selection; without
+# cookies, lead with the clients that don't need auth to at least work.
+PLAYER_CLIENT_ATTEMPTS = (
+    [["web", "tv"], ["android"], ["ios"]]
+    if COOKIES_FILE
+    else [["android"], ["ios"], ["web", "tv"]]
+)
 
 
 class YouTubeDownloadError(Exception):
