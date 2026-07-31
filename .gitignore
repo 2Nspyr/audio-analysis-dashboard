@@ -1,0 +1,10 @@
+__pycache__/
+*.pyc
+static/uploads/*
+static/reports/*
+static/work/*
+!static/uploads/.gitkeep
+!static/reports/.gitkeep
+!static/work/.gitkeep
+test_files/
+.DS_Store

@@ -1,0 +1,47 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>Audio Analysis Dashboard</title>
+  <style>
+    body { font-family: -apple-system, Arial, sans-serif; max-width: 640px; margin: 60px auto; padding: 0 20px; }
+    h1 { font-size: 22px; }
+    .drop { border: 2px dashed #999; border-radius: 8px; padding: 40px; text-align: center; margin-top: 20px; }
+    .flash { background: #fee; border: 1px solid #f99; padding: 10px; border-radius: 6px; margin-bottom: 16px; }
+    button { margin-top: 16px; padding: 10px 20px; font-size: 15px; cursor: pointer; }
+  </style>
+</head>
+<body>
+  <h1>Audio Frequency &amp; Tuning Analysis</h1>
+  <p>Upload a wav or mp3 file to get a tuning, spectral, binaural, isochronic, and harmonic balance report.</p>
+
+  {% with messages = get_flashed_messages() %}
+    {% if messages %}
+      {% for m in messages %}
+        <div class="flash">{{ m }}</div>
+      {% endfor %}
+    {% endif %}
+  {% endwith %}
+
+  <form action="/analyze" method="post" enctype="multipart/form-data">
+    <div class="drop">
+      <input type="file" name="audio_file" accept=".wav,.mp3,.m4a,.aac,.flac,.ogg" required>
+    </div>
+    <button type="submit">Analyze File</button>
+  </form>
+  <p style="color:#666; font-size: 13px;">Analysis can take a few seconds to a minute depending on file length.</p>
+
+  <div style="text-align:center; color:#999; margin: 24px 0;">— or —</div>
+
+  <form action="/analyze_url" method="post">
+    <input type="url" name="youtube_url" placeholder="https://www.youtube.com/watch?v=..."
+           style="width: 100%; box-sizing: border-box; padding: 10px; font-size: 14px;" required>
+    <button type="submit">Analyze YouTube Audio</button>
+  </form>
+  <p style="color:#666; font-size: 13px;">
+    URL downloads take a bit longer than file uploads. Note: downloading audio from YouTube for
+    personal analysis sits in a gray area of YouTube's terms of service — fine for private
+    verification use like this.
+  </p>
+</body>
+</html>
