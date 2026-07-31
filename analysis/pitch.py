@@ -7,13 +7,22 @@ estimation, similar in spirit to the classic autocorrelation method used in
 tools like Praat.
 """
 import numpy as np
+from analysis.dsp_utils import cascade_decimate
 
 MIN_F0 = 60.0     # Hz - lower bound of pitch search range
 MAX_F0 = 1000.0   # Hz - upper bound of pitch search range
-FRAME_LEN = 4096
-HOP = 2048
+
+# Pitches of interest top out at MAX_F0 (1000 Hz), so this whole stage is
+# run on a downsampled copy of the audio (2.5kHz Nyquist is plenty) instead
+# of the original 44.1/48kHz - shrinks every array below by ~10-18x, which
+# matters on Render's free tier (512MB limit): the old full-resolution
+# version could peak past 700MB on a single real track and get OOM-killed,
+# silently restarting the process and wiping in-progress job state.
+TARGET_SR = 8000.0
+FRAME_LEN = 800   # ~100ms at TARGET_SR
+HOP = 400         # ~50ms at TARGET_SR
 VOICING_THRESHOLD = 0.35  # normalized ACF peak strength required to call a frame "pitched"
-BATCH_FRAMES = 4000
+BATCH_FRAMES = 1000
 
 REFERENCE_PITCHES = [432.0, 434.0, 436.0, 438.0, 440.0, 442.0, 444.0, 446.0, 448.0]
 NOTE_NAMES = ["C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B"]
@@ -31,6 +40,8 @@ def _frame_signal(x, frame_len, hop):
 def track_pitch(mono: np.ndarray, sr: int):
     """Returns list of dicts: {time_sec, freq_hz, strength} for frames judged
     to have clear tonal/periodic content. Empty list if signal too short."""
+    mono, sr = cascade_decimate(mono, sr, TARGET_SR)
+
     if len(mono) < FRAME_LEN:
         return []
 

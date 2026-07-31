@@ -5,6 +5,7 @@ offset between channels across time, not just a single global comparison.
 """
 import numpy as np
 from scipy.signal import welch
+from analysis.dsp_utils import cascade_decimate
 
 BAND_LABELS = [
     (0.5, 4, "delta"),
@@ -54,8 +55,14 @@ def analyze_binaural(data: np.ndarray, sr: int, channels: int):
                        "channels to compare.",
         }
 
-    left = data[:, 0]
-    right = data[:, 1]
+    # Carrier tones of interest top out at MAX_CARRIER_HZ (2000 Hz), so working
+    # at full sample rate (commonly 44.1/48kHz) wastes memory holding two
+    # full-resolution channel copies for a stage that only needs ~5x that
+    # bandwidth. Downsampling first cuts the array size (and everything
+    # derived from it) by roughly sr/5000x with no loss of relevant signal.
+    left, ds_sr = cascade_decimate(data[:, 0], sr, MAX_CARRIER_HZ * 2.5)
+    right, _ = cascade_decimate(data[:, 1], sr, MAX_CARRIER_HZ * 2.5)
+    sr = ds_sr
 
     peak_l, prom_l = _dominant_peak(left, sr)
     peak_r, prom_r = _dominant_peak(right, sr)
