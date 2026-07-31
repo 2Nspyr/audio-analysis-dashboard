@@ -4,7 +4,9 @@ rates of interest are low (0.5-40 Hz), which keeps this fast even on long
 files and avoids a full-resolution Hilbert transform.
 """
 import numpy as np
-from scipy.signal import decimate, welch, butter, filtfilt
+from scipy.signal import welch, butter, filtfilt
+from scipy.signal.windows import hann
+from analysis.dsp_utils import cascade_decimate
 
 ENV_SR = 1000  # approximate working sample rate for envelope analysis
 MIN_PULSE_HZ = 0.5
@@ -14,20 +16,10 @@ N_SEGMENTS = 6
 
 
 def _downsample(mono, sr, target_sr=ENV_SR):
-    """Decimate in cascaded stages (factor <=10 per stage, scipy's recommended
-    limit for stable IIR anti-aliasing) so the actual output sample rate is
-    always known exactly - avoids the rate-mismatch bugs a single big
-    resample_poly ratio approximation can introduce."""
-    x = mono.astype(np.float64)
-    cur_sr = float(sr)
-    while cur_sr / target_sr > 10:
-        x = decimate(x, 10, zero_phase=True)
-        cur_sr /= 10
-    remaining_factor = int(round(cur_sr / target_sr))
-    if remaining_factor > 1:
-        x = decimate(x, remaining_factor, zero_phase=True)
-        cur_sr /= remaining_factor
-    return x, cur_sr
+    """Thin wrapper around the shared cascade_decimate helper (this used to
+    be its own separate implementation - now delegates so isochronic gets
+    the same chunked-decimation memory bound as every other stage)."""
+    return cascade_decimate(mono, sr, target_sr)
 
 
 def _pulse_rate(env, sr):
@@ -35,7 +27,10 @@ def _pulse_rate(env, sr):
     nperseg = min(len(env), 8192)
     if nperseg < 256:
         return None, None
-    f, pxx = welch(env, fs=sr, nperseg=nperseg)
+    # Explicit float32 window avoids welch's default float64 window silently
+    # upcasting (and roughly doubling) its internal working arrays.
+    window = hann(nperseg, sym=False).astype(np.float32)
+    f, pxx = welch(env, fs=sr, window=window, nperseg=nperseg)
     mask = (f >= MIN_PULSE_HZ) & (f <= MAX_PULSE_HZ)
     if not mask.any():
         return None, None

@@ -5,6 +5,7 @@ offset between channels across time, not just a single global comparison.
 """
 import numpy as np
 from scipy.signal import welch
+from scipy.signal.windows import hann
 from analysis.dsp_utils import cascade_decimate
 
 BAND_LABELS = [
@@ -20,6 +21,18 @@ MAX_CARRIER_HZ = 2000
 MAX_BEAT_HZ = 40  # beats above this aren't perceptible/typical for binaural entrainment
 N_SEGMENTS = 6
 
+# welch()'s memory cost scales with how many overlapping segments it has to
+# process, which scales with array length - not just nperseg. Running it on
+# a full 30-40 minute track (this app's real use case) measured as the
+# single biggest spike anywhere in the whole pipeline (+488MB in profiling
+# on a 25-minute synthetic file), even after downsampling and the float32
+# window fix. A binaural carrier tone is stationary by design (that's the
+# whole point of the technique), so the first few minutes are exactly as
+# informative as the full track for the initial "is there a dominant tone
+# at all" check - the segment-by-segment consistency check right after this
+# still covers the entire track, just via bounded slices.
+MAX_GLOBAL_CHECK_SEC = 180
+
 
 def _band_label(beat_hz):
     for lo, hi, name in BAND_LABELS:
@@ -32,7 +45,10 @@ def _dominant_peak(x, sr, fmin=MIN_CARRIER_HZ, fmax=MAX_CARRIER_HZ):
     nperseg = min(len(x), 65536)
     if nperseg < 1024:
         return None, None
-    f, pxx = welch(x, fs=sr, nperseg=nperseg)
+    # Explicit float32 window avoids welch's default float64 window silently
+    # upcasting (and roughly doubling) its internal working arrays.
+    window = hann(nperseg, sym=False).astype(np.float32)
+    f, pxx = welch(x, fs=sr, window=window, nperseg=nperseg)
     mask = (f >= fmin) & (f <= fmax)
     if not mask.any():
         return None, None
@@ -64,8 +80,9 @@ def analyze_binaural(data: np.ndarray, sr: int, channels: int):
     right, _ = cascade_decimate(data[:, 1], sr, MAX_CARRIER_HZ * 2.5)
     sr = ds_sr
 
-    peak_l, prom_l = _dominant_peak(left, sr)
-    peak_r, prom_r = _dominant_peak(right, sr)
+    global_cap = int(MAX_GLOBAL_CHECK_SEC * sr)
+    peak_l, prom_l = _dominant_peak(left[:global_cap], sr)
+    peak_r, prom_r = _dominant_peak(right[:global_cap], sr)
 
     MIN_PROMINENCE = 4.0
 
