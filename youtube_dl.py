@@ -1,12 +1,12 @@
 """YouTube URL -> wav download, using yt-dlp + ffmpeg.
 
-NOTE: yt-dlp is not installable in the dev sandbox this was built in (no
-PyPI access there), so this module is untested locally. It will run in any
-environment where `pip install yt-dlp` succeeded (e.g. Render's build,
-which has full internet access) and ffmpeg is on PATH. The code follows
-yt-dlp's standard documented API, so it should work, but it's flagged here
-as the one part of this build that hasn't been verified against a real
-download in this session - test it first thing after deploying.
+YouTube increasingly blocks the default "web" client with a
+"Sign in to confirm you're not a bot" error, especially from datacenter IPs
+(which is exactly what a Render server is). yt-dlp's known workaround is to
+request other player clients (android/ios/tv) that don't trigger the same
+check, tried in order until one works. If YouTube tightens this further and
+all clients start failing, the real fix is supplying browser cookies (see
+COOKIES_FILE below) - that's a bigger lift so it's not wired in by default.
 """
 import os
 import re
@@ -16,6 +16,20 @@ YOUTUBE_URL_RE = re.compile(
     r"^https?://(www\.)?(youtube\.com/(watch\?v=|shorts/)|youtu\.be/)[\w-]+", re.IGNORECASE
 )
 
+# Player clients to try, in order, when the default fails with a bot-check
+# error. Each is a full retry attempt, not a fallback within one request.
+PLAYER_CLIENT_ATTEMPTS = [
+    ["android"],
+    ["ios"],
+    ["web", "tv"],
+]
+
+# Optional: path to a Netscape-format cookies.txt file (exported from a
+# logged-in browser session) for when player-client spoofing alone isn't
+# enough. Not required for normal operation - only set this if downloads
+# keep failing with a bot-check error even after the client fallback above.
+COOKIES_FILE = os.environ.get("YOUTUBE_COOKIES_FILE")
+
 
 class YouTubeDownloadError(Exception):
     pass
@@ -23,6 +37,25 @@ class YouTubeDownloadError(Exception):
 
 def is_youtube_url(url: str) -> bool:
     return bool(YOUTUBE_URL_RE.match(url.strip()))
+
+
+def _base_opts(work_dir: str, job_id: str):
+    out_template = os.path.join(work_dir, f"yt_{job_id}.%(ext)s")
+    opts = {
+        "format": "bestaudio/best",
+        "outtmpl": out_template,
+        "postprocessors": [{
+            "key": "FFmpegExtractAudio",
+            "preferredcodec": "wav",
+            "preferredquality": "0",
+        }],
+        "noplaylist": True,
+        "quiet": True,
+        "no_warnings": True,
+    }
+    if COOKIES_FILE and os.path.exists(COOKIES_FILE):
+        opts["cookiefile"] = COOKIES_FILE
+    return opts
 
 
 def download_audio(url: str, work_dir: str) -> str:
@@ -37,33 +70,24 @@ def download_audio(url: str, work_dir: str) -> str:
         ) from e
 
     job_id = uuid.uuid4().hex[:12]
-    out_template = os.path.join(work_dir, f"yt_{job_id}.%(ext)s")
+    last_error = None
 
-    ydl_opts = {
-        "format": "bestaudio/best",
-        "outtmpl": out_template,
-        "postprocessors": [{
-            "key": "FFmpegExtractAudio",
-            "preferredcodec": "wav",
-            "preferredquality": "0",
-        }],
-        "noplaylist": True,
-        "quiet": True,
-        "no_warnings": True,
-    }
+    for clients in PLAYER_CLIENT_ATTEMPTS:
+        ydl_opts = _base_opts(work_dir, job_id)
+        ydl_opts["extractor_args"] = {"youtube": {"player_client": clients}}
+        try:
+            with yt_dlp.YoutubeDL(ydl_opts) as ydl:
+                ydl.download([url])
+            expected_wav = os.path.join(work_dir, f"yt_{job_id}.wav")
+            if os.path.exists(expected_wav):
+                return expected_wav
+            for f in os.listdir(work_dir):
+                if f.startswith(f"yt_{job_id}"):
+                    return os.path.join(work_dir, f)
+        except Exception as e:
+            last_error = e
+            continue
 
-    try:
-        with yt_dlp.YoutubeDL(ydl_opts) as ydl:
-            ydl.download([url])
-    except Exception as e:
-        raise YouTubeDownloadError(f"Could not download audio from that URL: {e}") from e
-
-    expected_wav = os.path.join(work_dir, f"yt_{job_id}.wav")
-    if os.path.exists(expected_wav):
-        return expected_wav
-
-    for f in os.listdir(work_dir):
-        if f.startswith(f"yt_{job_id}"):
-            return os.path.join(work_dir, f)
-
-    raise YouTubeDownloadError("Download completed but no output file was found.")
+    raise YouTubeDownloadError(
+        f"Could not download audio from that URL after trying multiple methods: {last_error}"
+    )
