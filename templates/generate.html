@@ -4,17 +4,53 @@
   <meta charset="utf-8">
   <title>Generate Frequency File</title>
   <style>
-    body { font-family: -apple-system, Arial, sans-serif; max-width: 640px; margin: 60px auto; padding: 0 20px; }
-    h1 { font-size: 22px; }
-    fieldset { border: 1px solid #ddd; border-radius: 8px; padding: 16px 20px; margin-bottom: 16px; }
-    legend { font-weight: 600; padding: 0 6px; }
-    label { display: block; margin: 10px 0 4px; font-size: 14px; }
-    input[type=number], input[type=file] { padding: 8px; width: 100%; box-sizing: border-box; }
+    :root {
+      --bg: #0a0c11; --panel: #151922; --panel-2: #1a1f2b; --border: #262b38; --border-soft: #1e2330;
+      --text: #e7e9ee; --text-dim: #8b93a7; --text-faint: #5c6478;
+      --accent: #4fd1c5; --accent-soft: rgba(79, 209, 197, 0.14); --accent-glow: rgba(79, 209, 197, 0.35);
+      --radius: 10px;
+    }
+    * { box-sizing: border-box; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Arial, sans-serif;
+      max-width: 640px; margin: 0 auto; padding: 50px 20px 80px;
+      background: radial-gradient(ellipse 900px 500px at 50% -10%, #182035 0%, var(--bg) 55%);
+      color: var(--text); min-height: 100vh;
+    }
+    .nav { margin-bottom: 22px; font-size: 13px; }
+    .nav a { color: var(--text-dim); text-decoration: none; }
+    .nav a:hover { color: var(--accent); }
+    h1 {
+      font-size: 22px; margin: 0 0 22px; font-weight: 700; letter-spacing: -0.01em;
+      background: linear-gradient(120deg, #f2f4f8, var(--accent));
+      -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent;
+      display: inline-block;
+    }
+    fieldset {
+      border: 1px solid var(--border); border-radius: var(--radius); padding: 18px 20px;
+      margin-bottom: 16px; background: var(--panel);
+    }
+    legend { font-weight: 600; padding: 0 8px; color: var(--accent); font-size: 13px; letter-spacing: 0.03em; text-transform: uppercase; }
+    label { display: block; margin: 12px 0 5px; font-size: 13.5px; color: var(--text-dim); }
+    fieldset > label:first-of-type { margin-top: 4px; }
+    input[type=radio] { accent-color: var(--accent); }
+    input[type=number], input[type=file] {
+      background: var(--panel-2); border: 1px solid var(--border); color: var(--text);
+      padding: 9px 11px; width: 100%; box-sizing: border-box; border-radius: 6px; font-size: 14px;
+    }
+    input[type=number]:focus { outline: none; border-color: var(--accent); box-shadow: 0 0 0 3px var(--accent-soft); }
     .mode-block { display: none; }
     .mode-block.active { display: block; }
-    button { margin-top: 20px; padding: 10px 20px; font-size: 15px; cursor: pointer; }
-    .flash { background: #fee; border: 1px solid #f99; padding: 10px; border-radius: 6px; margin-bottom: 16px; }
-    .nav { margin-bottom: 20px; }
+    button {
+      margin-top: 22px; padding: 11px 24px; font-size: 14.5px; font-weight: 600; cursor: pointer;
+      background: linear-gradient(135deg, var(--accent), #38b2ac); color: #06211e; border: none;
+      border-radius: 8px; letter-spacing: 0.02em; transition: box-shadow 0.15s, transform 0.1s;
+    }
+    button:hover { box-shadow: 0 0 0 4px var(--accent-glow); }
+    button:active { transform: scale(0.98); }
+    .flash { background: rgba(248, 113, 113, 0.1); border: 1px solid rgba(248, 113, 113, 0.35); color: #fca5a5;
+             padding: 12px 14px; border-radius: 8px; margin-bottom: 16px; font-size: 13.5px; }
+    p { color: var(--text-faint); font-size: 12.5px; }
   </style>
 </head>
 <body>
@@ -48,7 +84,7 @@
         <input type="number" name="carrier" value="200" step="0.1" min="20" max="2000">
         <label>Beat rate (Hz)</label>
         <input type="number" name="beat" value="6" step="0.1" min="0.5" max="40">
-        <p style="color:#666; font-size: 13px;">Requires headphones to perceive the beat — each ear needs a separate tone.</p>
+        <p>Requires headphones to perceive the beat — each ear needs a separate tone.</p>
       </div>
 
       <div id="mode-isochronic" class="mode-block">
