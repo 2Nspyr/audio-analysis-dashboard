@@ -10,6 +10,7 @@ COOKIES_FILE below) - that's a bigger lift so it's not wired in by default.
 """
 import os
 import re
+import shutil
 import uuid
 
 YOUTUBE_URL_RE = re.compile(
@@ -39,6 +40,16 @@ def is_youtube_url(url: str) -> bool:
     return bool(YOUTUBE_URL_RE.match(url.strip()))
 
 
+def _writable_cookies_copy(work_dir: str) -> str:
+    """yt-dlp writes updated cookies back to whatever file it's given (to
+    persist session refreshes), but Render's Secret Files are mounted
+    read-only - so point it at a writable copy instead of the original."""
+    dest = os.path.join(work_dir, "_yt_cookies_writable.txt")
+    if not os.path.exists(dest) or os.path.getmtime(COOKIES_FILE) > os.path.getmtime(dest):
+        shutil.copyfile(COOKIES_FILE, dest)
+    return dest
+
+
 def _base_opts(work_dir: str, job_id: str):
     out_template = os.path.join(work_dir, f"yt_{job_id}.%(ext)s")
     opts = {
@@ -54,7 +65,7 @@ def _base_opts(work_dir: str, job_id: str):
         "no_warnings": True,
     }
     if COOKIES_FILE and os.path.exists(COOKIES_FILE):
-        opts["cookiefile"] = COOKIES_FILE
+        opts["cookiefile"] = _writable_cookies_copy(work_dir)
     return opts
 
 
