@@ -18,10 +18,16 @@
     .chip { font-size: 12px; color: #4a90d9; border: 1px solid #cfe0f3; background: #f3f8fd;
             border-radius: 14px; padding: 4px 12px; text-decoration: none; }
     .chip:hover { background: #e6f1fb; }
-    .category-section { margin-bottom: 30px; }
-    .category-heading { font-size: 17px; font-weight: 700; margin: 0 0 4px; padding-top: 6px;
-                         scroll-margin-top: 70px; }
+    .category-section { margin-bottom: 12px; border: 1px solid #e5e5e5; border-radius: 8px; overflow: hidden; }
+    .category-heading { font-size: 16px; font-weight: 700; margin: 0; padding: 14px 16px;
+                         scroll-margin-top: 70px; cursor: pointer; display: flex; align-items: center;
+                         justify-content: space-between; background: #fafafa; user-select: none; }
+    .category-heading:hover { background: #f2f2f2; }
     .category-count { color: #999; font-weight: 400; font-size: 13px; }
+    .category-caret { color: #999; font-size: 13px; transition: transform 0.15s ease; }
+    .category-section.expanded .category-caret { transform: rotate(90deg); }
+    .category-body { display: none; padding: 14px 16px; }
+    .category-section.expanded .category-body { display: block; }
     .entry { border: 1px solid #ddd; border-radius: 8px; padding: 14px 18px; margin-bottom: 10px; }
     .entry-top { display: flex; justify-content: space-between; align-items: baseline; cursor: pointer; }
     .entry-name { font-weight: 600; font-size: 15px; }
@@ -61,46 +67,49 @@
 
   <div class="chips">
     {% for category, group in grouped_entries %}
-      <a class="chip" href="#cat-{{ loop.index }}">{{ category }}</a>
+      <a class="chip" href="#cat-{{ loop.index }}" onclick="expandAndScroll(event, {{ loop.index }})">{{ category }}</a>
     {% endfor %}
   </div>
 
   <div id="entryList">
     {% for category, group in grouped_entries %}
     <div class="category-section" data-category="{{ category }}">
-      <h2 class="category-heading" id="cat-{{ loop.index }}">
-        {{ category }} <span class="category-count">({{ group|length }})</span>
+      <h2 class="category-heading" id="cat-{{ loop.index }}" onclick="toggleCategory(this.parentElement)">
+        <span>{{ category }} <span class="category-count">({{ group|length }})</span></span>
+        <span class="category-caret">&#9656;</span>
       </h2>
 
-      {% for e in group %}
-      <div class="entry" data-name="{{ e.name|lower }}" data-category="{{ e.category }}">
-        <div class="entry-top" onclick="toggleForm('{{ e.slug }}')">
-          <div>
-            <div class="entry-name">{{ e.name }}<span class="entry-system">{{ e.system }}</span></div>
-            <div class="entry-freqs">{{ e.frequencies_display }} Hz</div>
+      <div class="category-body">
+        {% for e in group %}
+        <div class="entry" data-name="{{ e.name|lower }}" data-category="{{ e.category }}">
+          <div class="entry-top" onclick="toggleForm('{{ e.slug }}')">
+            <div>
+              <div class="entry-name">{{ e.name }}<span class="entry-system">{{ e.system }}</span></div>
+              <div class="entry-freqs">{{ e.frequencies_display }} Hz</div>
+            </div>
+            <div class="toggle-hint" id="hint-{{ e.slug }}">Generate &darr;</div>
           </div>
-          <div class="toggle-hint" id="hint-{{ e.slug }}">Generate &darr;</div>
+
+          <form class="entry-form" id="form-{{ e.slug }}" action="/library/{{ e.slug }}/generate" method="post" enctype="multipart/form-data">
+            <label>Duration (seconds)</label>
+            <input type="number" name="duration" value="300" step="10" min="10" max="3600">
+
+            <label>Render mode</label>
+            <select name="render_mode">
+              <option value="auto">Auto (tone above 20Hz, pulse below)</option>
+              <option value="isochronic">Force isochronic pulse for every step</option>
+            </select>
+
+            <label>Optional: layer under an imported file</label>
+            <input type="file" name="layer_file" accept=".wav,.mp3,.m4a,.aac,.flac,.ogg">
+            <label>Bed volume (0 = imported file only, 1 = generated sequence only)</label>
+            <input type="number" name="mix_ratio" value="0.4" step="0.05" min="0" max="1">
+
+            <div><button type="submit">Generate &amp; download</button></div>
+          </form>
         </div>
-
-        <form class="entry-form" id="form-{{ e.slug }}" action="/library/{{ e.slug }}/generate" method="post" enctype="multipart/form-data">
-          <label>Duration (seconds)</label>
-          <input type="number" name="duration" value="300" step="10" min="10" max="3600">
-
-          <label>Render mode</label>
-          <select name="render_mode">
-            <option value="auto">Auto (tone above 20Hz, pulse below)</option>
-            <option value="isochronic">Force isochronic pulse for every step</option>
-          </select>
-
-          <label>Optional: layer under an imported file</label>
-          <input type="file" name="layer_file" accept=".wav,.mp3,.m4a,.aac,.flac,.ogg">
-          <label>Bed volume (0 = imported file only, 1 = generated sequence only)</label>
-          <input type="number" name="mix_ratio" value="0.4" step="0.05" min="0" max="1">
-
-          <div><button type="submit">Generate &amp; download</button></div>
-        </form>
+        {% endfor %}
       </div>
-      {% endfor %}
     </div>
     {% endfor %}
   </div>
@@ -115,15 +124,31 @@
       hint.textContent = open ? 'Hide' : 'Generate ↓';
     }
 
+    function toggleCategory(section) {
+      section.classList.toggle('expanded');
+    }
+
+    function expandAndScroll(evt, index) {
+      evt.preventDefault();
+      const heading = document.getElementById('cat-' + index);
+      const section = heading.parentElement;
+      section.classList.add('expanded');
+      heading.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+
     const searchBox = document.getElementById('search');
     const categorySelect = document.getElementById('categoryFilter');
     const sections = Array.from(document.querySelectorAll('.category-section'));
     const resultCount = document.getElementById('resultCount');
     const noResults = document.getElementById('noResults');
 
+    // Collapsed by default keeps the page short; searching or picking a
+    // category should surface matches immediately rather than making the
+    // person expand the right section by hand to see if it has any.
     function applyFilter() {
       const q = searchBox.value.trim().toLowerCase();
       const cat = categorySelect.value;
+      const filtering = q.length > 0 || cat.length > 0;
       let visible = 0;
 
       sections.forEach(section => {
@@ -132,13 +157,22 @@
           section.style.display = 'none';
           return;
         }
+        section.style.display = '';
+
         let sectionVisible = 0;
         section.querySelectorAll('.entry').forEach(el => {
           const show = !q || el.dataset.name.includes(q);
           el.style.display = show ? '' : 'none';
           if (show) sectionVisible++;
         });
-        section.style.display = sectionVisible === 0 ? 'none' : '';
+
+        if (sectionVisible === 0) {
+          section.style.display = 'none';
+        } else if (filtering) {
+          section.classList.add('expanded');
+        } else {
+          section.classList.remove('expanded');
+        }
         visible += sectionVisible;
       });
 
