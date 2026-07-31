@@ -16,7 +16,12 @@
       background: radial-gradient(ellipse 900px 500px at 50% -10%, #182035 0%, var(--bg) 55%);
       color: var(--text); min-height: 100vh;
     }
-    .nav { margin-bottom: 24px; font-size: 13px; }
+    .site-header {
+      display: flex; justify-content: space-between; align-items: center;
+      margin-bottom: 24px; gap: 16px; flex-wrap: wrap;
+    }
+    .brand-logo { height: 24px; width: auto; opacity: 0.92; display: block; }
+    .nav { font-size: 13px; }
     .nav a { color: var(--text-dim); text-decoration: none; }
     .nav a:hover { color: var(--accent); }
     .panel {
@@ -41,7 +46,10 @@
   </style>
 </head>
 <body>
-  <div class="nav"><a href="/">&larr; Frequency library</a> &middot; <a href="/generate">Generate another</a> &middot; <a href="/analyze">Analyze audio</a></div>
+  <div class="site-header">
+    <img src="/static/img/logo.png" alt="Brenda Johnston" class="brand-logo">
+    <div class="nav"><a href="/">&larr; Frequency library</a> &middot; <a href="/generate">Generate another</a> &middot; <a href="/analyze">Analyze audio</a></div>
+  </div>
 
   <div class="panel">
     <h2>{{ label }}</h2>

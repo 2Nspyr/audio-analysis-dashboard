@@ -30,7 +30,12 @@
       color: var(--text);
       min-height: 100vh;
     }
-    .nav { margin-bottom: 28px; font-size: 13px; }
+    .site-header {
+      display: flex; justify-content: space-between; align-items: center;
+      margin-bottom: 26px; gap: 16px; flex-wrap: wrap;
+    }
+    .brand-logo { height: 26px; width: auto; opacity: 0.92; display: block; }
+    .nav { font-size: 13px; }
     .nav a { color: var(--text-dim); text-decoration: none; letter-spacing: 0.02em; }
     .nav a:hover { color: var(--accent); }
     h1 {
@@ -67,8 +72,6 @@
       0%, 100% { transform: scaleY(0.25); opacity: 0.7; }
       50% { transform: scaleY(1); opacity: 1; }
     }
-    .eq-mini.eq-dim span { background: linear-gradient(180deg, var(--text-dim), #2c3141); opacity: 0.6; }
-
     /* Ambient hero waveform — pure CSS/JS decoration, zero server cost. */
     .hero-wave {
       display: flex; align-items: center; gap: 3px; height: 46px;
@@ -167,7 +170,10 @@
   </style>
 </head>
 <body>
-  <div class="nav"><a href="/generate">Freeform generator</a> &middot; <a href="/analyze">Analyze audio</a></div>
+  <div class="site-header">
+    <img src="/static/img/logo.png" alt="Brenda Johnston" class="brand-logo">
+    <div class="nav"><a href="/generate">Freeform generator</a> &middot; <a href="/analyze">Analyze audio</a></div>
+  </div>
   <h1><span class="eq-mini"><span></span><span></span><span></span><span></span></span>Frequency Library</h1>
   <p class="tagline">Search, browse, and generate downloadable tone sequences</p>
 
@@ -199,10 +205,7 @@
     {% for category, group in grouped_entries %}
     <div class="category-section" data-category="{{ category }}">
       <h2 class="category-heading" id="cat-{{ loop.index }}" onclick="toggleCategory(this.parentElement)">
-        <span style="display:flex; align-items:center; gap:10px;">
-          <span class="eq-mini eq-dim"><span></span><span></span><span></span><span></span></span>
-          {{ category }} <span class="category-count">({{ group|length }})</span>
-        </span>
+        <span>{{ category }} <span class="category-count">({{ group|length }})</span></span>
         <span class="category-caret">&#9656;</span>
       </h2>
 

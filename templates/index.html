@@ -46,14 +46,22 @@
     button:active { transform: scale(0.98); }
     .divider { text-align: center; color: var(--text-faint); margin: 26px 0; font-size: 12.5px; letter-spacing: 0.05em; }
     .footer-link { text-align: center; margin-top: 34px; }
-    .footer-link a, .nav-link a { color: var(--accent); text-decoration: none; font-size: 14px; }
-    .nav-link { margin-bottom: 22px; font-size: 13px; }
-    .nav-link a { color: var(--text-dim); }
+    .footer-link a { color: var(--accent); text-decoration: none; font-size: 14px; }
+    .site-header {
+      display: flex; justify-content: space-between; align-items: center;
+      margin-bottom: 22px; gap: 16px; flex-wrap: wrap;
+    }
+    .brand-logo { height: 24px; width: auto; opacity: 0.92; display: block; }
+    .nav-link { font-size: 13px; }
+    .nav-link a { color: var(--text-dim); text-decoration: none; }
     .nav-link a:hover { color: var(--accent); }
   </style>
 </head>
 <body>
-  <div class="nav-link"><a href="/">&larr; Frequency library</a></div>
+  <div class="site-header">
+    <img src="/static/img/logo.png" alt="Brenda Johnston" class="brand-logo">
+    <div class="nav-link"><a href="/">&larr; Frequency library</a></div>
+  </div>
   <h1>Audio Frequency &amp; Tuning Analysis</h1>
   <p>Upload a wav or mp3 file to get a tuning, spectral, binaural, isochronic, and harmonic balance report.</p>
 
