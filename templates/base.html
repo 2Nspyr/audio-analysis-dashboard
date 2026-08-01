@@ -65,6 +65,20 @@
       background: linear-gradient(90deg, var(--teal-soft), transparent);
       color: var(--text); border-left: 2px solid var(--teal); padding-left: 10px;
     }
+    .sidebar-search {
+      display: flex; align-items: center; gap: 9px; margin: 10px 2px 4px; padding: 9px 12px;
+      border: 1px solid var(--border); border-radius: 8px; background: var(--panel);
+      transition: border-color 0.12s, box-shadow 0.12s;
+    }
+    .sidebar-search:focus-within { border-color: var(--teal); box-shadow: 0 0 0 3px var(--teal-soft); }
+    .sidebar-search-icon { color: var(--text-faint); flex-shrink: 0; display: flex; }
+    .sidebar-search-icon svg { width: 15px; height: 15px; }
+    .sidebar-search input {
+      background: transparent; border: none; outline: none; color: var(--text);
+      font-size: 13px; font-family: var(--sans); width: 100%; padding: 0;
+    }
+    .sidebar-search input::placeholder { color: var(--text-faint); }
+    .sidebar-search input::-webkit-search-cancel-button { filter: invert(0.6); }
     .sidebar-spacer { flex: 1; }
     .sidebar-quote {
       font-family: var(--serif); font-style: italic; color: var(--text-dim); font-size: 14px;
@@ -132,8 +146,12 @@
         <a href="/" class="{{ 'active' if request.path == '/' else '' }}">{{ nav_icons.library|safe }} Library</a>
         <a href="/library" class="{{ 'active' if request.path.startswith('/library') else '' }}">{{ nav_icons.presets|safe }} Presets</a>
         <a href="/exports" class="{{ 'active' if request.path == '/exports' else '' }}">{{ nav_icons.exports|safe }} Exports</a>
-        <a href="/settings" class="{{ 'active' if request.path == '/settings' else '' }}">{{ nav_icons.settings|safe }} Settings</a>
       </nav>
+
+      <form class="sidebar-search" action="/library" method="get">
+        <span class="sidebar-search-icon">{{ nav_icons.search|safe }}</span>
+        <input type="search" name="q" placeholder="Search all presets…" autocomplete="off">
+      </form>
 
       <div class="sidebar-spacer"></div>
 

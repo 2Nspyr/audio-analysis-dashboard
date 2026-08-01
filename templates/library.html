@@ -125,7 +125,7 @@
 
       <div class="category-body">
         {% for e in group %}
-        <div class="entry" data-name="{{ e.name|lower }}" data-category="{{ e.category }}">
+        <div class="entry" data-search="{{ (e.name ~ ' ' ~ e.category ~ ' ' ~ e.frequencies_display)|lower }}" data-category="{{ e.category }}">
           <div class="entry-top" onclick="toggleForm('{{ e.slug }}')">
             <div>
               <div class="entry-name">{{ e.name }}<span class="entry-system">{{ e.system }}</span></div>
@@ -207,7 +207,7 @@
 
         let sectionVisible = 0;
         section.querySelectorAll('.entry').forEach(el => {
-          const show = !q || el.dataset.name.includes(q);
+          const show = !q || el.dataset.search.includes(q);
           el.style.display = show ? '' : 'none';
           if (show) sectionVisible++;
         });
@@ -231,9 +231,17 @@
 
     // Arriving from a dashboard "Explore by Intention" / category card
     // link (?cat=Category+Name) should land already filtered to that
-    // category, with its section open and in view.
+    // category, with its section open and in view. Arriving from the
+    // sidebar's global search (?q=term) should land with that term
+    // already typed into the search box.
     const params = new URLSearchParams(window.location.search);
     const preselectCat = params.get('cat');
+    const presetQuery = params.get('q');
+
+    if (presetQuery) {
+      searchBox.value = presetQuery;
+    }
+
     if (preselectCat && Array.from(categorySelect.options).some(o => o.value === preselectCat)) {
       categorySelect.value = preselectCat;
       applyFilter();
@@ -244,6 +252,11 @@
       }
     } else {
       applyFilter();
+    }
+
+    if (presetQuery) {
+      searchBox.focus();
+      searchBox.setSelectionRange(searchBox.value.length, searchBox.value.length);
     }
   </script>
 {% endblock %}
